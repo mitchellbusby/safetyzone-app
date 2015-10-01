@@ -1,0 +1,18 @@
+<!--<android.support.v7.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:iosched="http://schemas.android.com/apk/res-auto"
+    iosched:theme="@style/Widget.AppCompat.ActionBar"
+    iosched:popupTheme="@style/Theme.AppCompat.NoActionBar"
+    android:id="@+id/toolbar_actionbar"
+    iosched:titleTextAppearance="@style/ActionBar.TitleText"
+    iosched:contentInsetStart="?actionBarInsetStart"
+    android:layout_width="match_parent"
+    android:layout_height="?actionBarSize" />-->
+
+<android.support.v7.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:app="http://schemas.android.com/apk/res-auto"
+android:layout_height="?attr/actionBarSize"
+android:layout_width="match_parent"
+android:minHeight="?attr/actionBarSize"
+android:background="@color/color_primary_dark"
+app:theme="@style/AppTheme" android:id="@+id/mainToolbar"
+app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
