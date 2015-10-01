@@ -20,7 +20,10 @@ public class Contacts extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_contacts);
         onCreateCustom();
-        List<String> values = Arrays.asList("Jess D'Ali", "Mitchell Busby", "Bec Lyons");
+        ArrayList<String> values = new ArrayList<>();
+        values.add("Jess D'Ali");
+        values.add("Mitchell Busby");
+        values.add("Bec Lyons");
         populateContactList(values);
 
     }
@@ -46,7 +49,7 @@ public class Contacts extends AppCompatActivity {
             }
         });
     }
-    public void populateContactList(List<String> values) {
+    public void populateContactList(ArrayList<String> values) {
         final ListView listView = (ListView) findViewById(R.id.contacts_list);
         /*String[] values = new String[] {
                 "Blah"
