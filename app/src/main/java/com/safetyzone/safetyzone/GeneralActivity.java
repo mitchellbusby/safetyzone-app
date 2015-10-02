@@ -1,31 +1,23 @@
 package com.safetyzone.safetyzone;
 
+import android.app.FragmentTransaction;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.view.Menu;
-import android.view.MenuItem;
+import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
-import android.widget.Toolbar;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
-public class Contacts extends AppCompatActivity {
+public class GeneralActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_contacts);
+        setContentView(R.layout.activity_general);
         onCreateCustom();
-        ArrayList<String> values = new ArrayList<>();
-        values.add("Jess D'Ali");
-        values.add("Mitchell Busby");
-        values.add("Bec Lyons");
-        populateContactList(values);
-
+        addContactsFragment();
     }
     public void onCreateCustom() {
         final android.support.v7.widget.Toolbar toolbar = (android.support.v7.widget.Toolbar) findViewById(R.id.mainToolbar);
@@ -35,29 +27,15 @@ public class Contacts extends AppCompatActivity {
         } catch (NullPointerException e) {
 
         }
+
         //toolbar.setTitle("Blah");
     }
-    public void addContact(ContactsAdapter<String> contactsAdapter) {
-        contactsAdapter.add("New Contact");
+    public void addContactsFragment() {
+        android.support.v4.app.FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        ft.replace(R.id.fragment_placeholder, new ContactsFragment());
+        ft.commit();
     }
-    public void addListenerToListModifierButton(final ContactsAdapter<String> contactsAdapter) {
-        final Button button = (Button) findViewById(R.id.add_to_list_button);
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                addContact(contactsAdapter);
-            }
-        });
-    }
-    public void populateContactList(ArrayList<String> values) {
-        final ListView listView = (ListView) findViewById(R.id.contacts_list);
-        /*String[] values = new String[] {
-                "Blah"
-        };*/
-        ContactsAdapter<String> arrayAdapter = new ContactsAdapter(getBaseContext(), R.layout.list_row, R.id.list_contact_name,values);
-        listView.setAdapter(arrayAdapter);
-        addListenerToListModifierButton(arrayAdapter);
-    }
+
     /*
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

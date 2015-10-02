@@ -18,5 +18,4 @@ public class ContactsAdapter<String> extends ArrayAdapter<String> {
         super.add(object);
         //notifyDataSetChanged();
     }
-
 }
