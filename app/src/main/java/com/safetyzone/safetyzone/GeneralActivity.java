@@ -1,16 +1,15 @@
 package com.safetyzone.safetyzone;
 
-import android.app.FragmentTransaction;
-import android.content.Context;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 
@@ -18,42 +17,40 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class GeneralActivity extends AppCompatActivity {
-    android.support.v7.widget.Toolbar toolbar;
-    DrawerLayout mDrawerLayout;
-    ActionBarDrawerToggle mDrawerToggle;
+    private android.support.v7.widget.Toolbar toolbar;
+    private DrawerLayout mDrawerLayout;
+    private ActionBarDrawerToggle mDrawerToggle;
+    private List<String> mDrawerList;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_general);
-        onCreateCustom();
-        addContactsFragment();
-        initialiseNavigationLinks();
+        setUpToolbar();
         initialiseNavigationDrawer();
+        changeFragment(mDrawerList.get(0));
     }
-    public void onCreateCustom() {
+
+    public void setUpToolbar() {
+        // Sets the toolbar for older APIs that don't support the tool bar such as ICS
         toolbar = (android.support.v7.widget.Toolbar) findViewById(R.id.mainToolbar);
+        toolbar.setTitleTextColor(Color.WHITE);
+        
         setSupportActionBar(toolbar);
-        try {
-            getSupportActionBar().setTitle("Blah");
-        } catch (NullPointerException e) {
-
-        }
-
-        //toolbar.setTitle("Blah");
     }
+
     public void initialiseNavigationDrawer() {
+        initialiseNavigationLinks();
         mDrawerLayout = (DrawerLayout) findViewById(R.id.activity_contacts);
         mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, toolbar, R.string.app_name, R.string.app_name) {
             /** Called when a drawer has settled in a completely closed state. */
             public void onDrawerClosed(View view) {
                 super.onDrawerClosed(view);
-                //getSupportActionBar().setTitle("Closed");
             }
 
             /** Called when a drawer has settled in a completely open state. */
             public void onDrawerOpened(View drawerView) {
                 super.onDrawerOpened(drawerView);
-                getSupportActionBar().setTitle("Open");
             }
         };
         mDrawerLayout.setDrawerListener(mDrawerToggle);
@@ -65,18 +62,47 @@ public class GeneralActivity extends AppCompatActivity {
         mDrawerToggle.syncState();
     }
     public void initialiseNavigationLinks() {
-        List<String> mDrawerList = new ArrayList<String>();
-        mDrawerList.add("Link 1");
+        mDrawerList = new ArrayList<String>();
+
+        // This should be dynamically generated somehow or based on something other than code
+        mDrawerList.add("Follow Me");
+        mDrawerList.add("Contacts");
+        mDrawerList.add("This link should change nothing");
+
         ListView mDrawerListView = (ListView) findViewById(R.id.nav_list);
-        ListAdapter drawerListAdapter = new ArrayAdapter<String>(getBaseContext(), R.layout.list_navigation, R.id.list_navigation_item, mDrawerList);
+        ListAdapter drawerListAdapter = new ArrayAdapter<String>(getBaseContext(), R.layout.list_style_navigation, R.id.list_navigation_item, mDrawerList);
+
         mDrawerListView.setAdapter(drawerListAdapter);
-        //mDrawerListView.setOnItemClickListener(new DrawerItemClickListener());
+        mDrawerListView.setOnItemClickListener(new DrawerItemClickListener());
 
     }
     public void addContactsFragment() {
         android.support.v4.app.FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         ft.replace(R.id.fragment_placeholder, new ContactsFragment());
         ft.commit();
+    }
+
+    public void changeFragment(String fragmentName) {
+        Fragment chosenFragment = null;
+        switch (fragmentName) {
+            case "Contacts": chosenFragment = new ContactsFragment();
+                break;
+            case "Follow Me": chosenFragment = new FollowFragment();
+                break;
+            default:
+                break;
+        }
+        if (chosenFragment!=null) {
+            android.support.v4.app.FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+            ft.replace(R.id.fragment_placeholder, chosenFragment);
+            ft.commit();
+            changeToolbarTitleText(fragmentName);
+        }
+        // Close drawers at the end tbh
+        mDrawerLayout.closeDrawers();
+    }
+    public void changeToolbarTitleText(String newTitle) {
+        getSupportActionBar().setTitle(newTitle);
     }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -86,30 +112,11 @@ public class GeneralActivity extends AppCompatActivity {
             return true;
         }
         // Handle your other action bar items...
-
         return super.onOptionsItemSelected(item);
     }
-    /*
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        //getMenuInflater().inflate(R.menu.menu_contacts, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+    private class DrawerItemClickListener implements AdapterView.OnItemClickListener {
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            changeFragment(mDrawerList.get(position));
         }
-
-        return super.onOptionsItemSelected(item);
-
-    }*/
+    }
 }
