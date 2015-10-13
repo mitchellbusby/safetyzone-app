@@ -67,7 +67,7 @@ public class GeneralActivity extends AppCompatActivity {
         // This should be dynamically generated somehow or based on something other than code
         mDrawerList.add("Follow Me");
         mDrawerList.add("Contacts");
-        mDrawerList.add("This link should change nothing");
+        mDrawerList.add("Safety Tips");
 
         ListView mDrawerListView = (ListView) findViewById(R.id.nav_list);
         ListAdapter drawerListAdapter = new ArrayAdapter<String>(getBaseContext(), R.layout.list_style_navigation, R.id.list_navigation_item, mDrawerList);
