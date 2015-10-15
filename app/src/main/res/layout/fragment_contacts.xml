@@ -12,16 +12,17 @@ android:paddingRight="@dimen/activity_horizontal_margin">
     android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_gravity="center_horizontal">
-
-    <TextView android:text="@string/hello_world" android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+    android:gravity="center">
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="ADD TO CONTACTS"
-        android:id="@+id/add_to_list_button" />
+        android:id="@+id/add_to_list_button"
+        android:onClick="onAddClicked"
+        />
+
+
 </LinearLayout>
 
 <ListView
@@ -29,4 +30,5 @@ android:paddingRight="@dimen/activity_horizontal_margin">
     android:layout_height="fill_parent"
     android:id="@+id/contacts_list">
 </ListView>
+
 </LinearLayout>
