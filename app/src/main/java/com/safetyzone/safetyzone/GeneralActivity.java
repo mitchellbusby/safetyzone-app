@@ -89,6 +89,8 @@ public class GeneralActivity extends AppCompatActivity {
                 break;
             case "Follow Me": chosenFragment = new FollowFragment();
                 break;
+            case "Safety Tips": chosenFragment = new safetytipFragment();
+                break;
             default:
                 break;
         }
