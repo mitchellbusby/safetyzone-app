@@ -12,23 +12,32 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
+
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.drive.Drive;
+import com.google.android.gms.location.LocationServices;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class GeneralActivity extends AppCompatActivity {
+public class GeneralActivity extends AppCompatActivity{
     private android.support.v7.widget.Toolbar toolbar;
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mDrawerToggle;
     private List<String> mDrawerList;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_general);
         setUpToolbar();
         initialiseNavigationDrawer();
         changeFragment(mDrawerList.get(0));
+
     }
 
     public void setUpToolbar() {
@@ -116,6 +125,7 @@ public class GeneralActivity extends AppCompatActivity {
         // Handle your other action bar items...
         return super.onOptionsItemSelected(item);
     }
+
     private class DrawerItemClickListener implements AdapterView.OnItemClickListener {
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             changeFragment(mDrawerList.get(position));

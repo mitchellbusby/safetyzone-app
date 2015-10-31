@@ -3,7 +3,16 @@
 
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+    <string name="contact_name">Contact Name:</string>
+    <string name="contact_number">Contact Number:</string>
+
+    <string name="add_contact">Add Contact</string>
+    <string name="cancel">Cancel</string>
     <string name="Safety">Safety Tips</string>
+    <string name="name">Name</string>
+    <string name="contact_number_data">0458524011</string>
+    <string name="contact_since">Contact Since</string>
+    <string name="contact_since_data">1/2/1999</string>
     <string-array name="list">
         <item>Item 1</item>
         <item>Item 2</item>

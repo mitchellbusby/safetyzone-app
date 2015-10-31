@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="8dp"
+    android:weightSum="6"
+    >
+
+    <TextView
+        android:id="@+id/list_item_contact_name_textview"
+        android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true"
+        android:layout_width="70dp"
+        android:layout_height="wrap_content"
+        android:textStyle="bold"
+        android:text="@string/name"
+        android:textSize="14sp"
+        android:layout_weight="2"/>
+
+    <LinearLayout
+        android:layout_width="200dp"
+
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/list_item_contact_name_textview"
+        android:layout_marginLeft="10dp"
+        android:orientation="vertical"
+        android:id="@+id/list_item_contact_name_text"
+        android:layout_weight="3">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/contact_number"
+                android:textStyle="bold"
+                android:textSize="14sp"
+                android:layout_marginRight="5dp"/>
+
+            <TextView
+                android:id="@+id/list_item_contact_number_textview"
+                android:textSize="14sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/contact_number_data"/>
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/contact_since"
+                android:textStyle="bold"
+                android:textSize="14sp"/>
+
+            <TextView
+                android:id="@+id/list_item_contact_since_date_textview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/contact_since_data"
+                android:layout_marginLeft="5dp"
+                android:textSize="14sp"/>
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:layout_toRightOf="@id/list_item_contact_name_text"
+        >
+
+        <ImageButton
+            android:id="@+id/delete_button"
+            android:src="@drawable/ic_delete_black_24dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
+</RelativeLayout>

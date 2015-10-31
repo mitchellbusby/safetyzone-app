@@ -19,7 +19,21 @@ android {
     }
 }
 
+apply plugin: 'com.android.application'
+
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     compile 'com.android.support:appcompat-v7:23.0.1'
+
+    compile'com.google.android.gms:play-services:8.1.0'
+
+    //compile 'com.google.android.gms:play-services-location:8.1.0'
+    //compile 'com.google.android.gms:play-services-nearby:8.1.0'
+    //compile 'com.google.android.gms:play-services-maps:8.1.0'
+
+    //the one below wont compile but is needed
+    //compile 'com.google.android.gms.common.GooglePlayServicesClient.ConnectionCallbacks'
+    //compile 'com.google.android.gms.common.GooglePlayServicesClient.OnConnectionFailedListener'
+
+
 }

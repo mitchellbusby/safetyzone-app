@@ -1,32 +1,47 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-android:layout_width="match_parent"
-android:layout_height="match_parent"
-android:paddingTop="@dimen/activity_vertical_margin"
-android:layout_weight="1"
-android:orientation="vertical"
-android:paddingLeft="@dimen/activity_horizontal_margin"
-android:paddingRight="@dimen/activity_horizontal_margin">
-
-<LinearLayout
-    android:orientation="horizontal"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_gravity="center_horizontal">
+    android:layout_height="match_parent"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:layout_weight="1"
+    android:orientation="vertical"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:id="@+id/contactFrag">
 
-    <TextView android:text="@string/hello_world" android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
 
-    <Button
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="ADD TO CONTACTS"
-        android:id="@+id/add_to_list_button" />
-</LinearLayout>
+        android:weightSum="6"
+        android:paddingBottom="10dp"
 
-<ListView
-    android:layout_width="wrap_content"
-    android:layout_height="fill_parent"
-    android:id="@+id/contacts_list">
-</ListView>
+        >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="My Contact List"
+            android:layout_weight="5"
+            android:textSize="20dp"
+            android:textStyle="bold"
+
+            />
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="ADD CONTACT"
+            android:id="@+id/add_to_list_button"
+            android:layout_weight="1"
+            />
+
+
+    </LinearLayout>
+
+    <ListView
+        android:layout_width="wrap_content"
+        android:layout_height="fill_parent"
+        android:id="@+id/contacts_list">
+    </ListView>
+
 </LinearLayout>
