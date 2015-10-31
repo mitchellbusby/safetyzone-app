@@ -75,10 +75,7 @@ public class FollowFragment extends Fragment implements GoogleApiClient.Connecti
 
         try {
             if (getLocationMode(getContext()) != 3) {
-                //popup();//lastLocation == null
-            } else {
-                Toast.makeText(getContext(), getLocationMode(getContext()), Toast.LENGTH_LONG).show();
-
+                popup();
             }
         } catch (Settings.SettingNotFoundException e) {
             e.printStackTrace();
@@ -103,10 +100,6 @@ public class FollowFragment extends Fragment implements GoogleApiClient.Connecti
         locationRequest.setFastestInterval(5000);
         locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
 
-        if(lastLocation == null)
-        {
-            popup();
-        }
     }
 
 
