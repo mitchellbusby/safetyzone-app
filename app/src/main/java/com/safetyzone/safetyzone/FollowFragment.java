@@ -1,12 +1,17 @@
 package com.safetyzone.safetyzone;
 
+import android.app.AlarmManager;
 import android.app.AlertDialog;
+import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.provider.Settings;
 import android.support.v4.app.Fragment;
 import android.telephony.SmsManager;
@@ -24,6 +29,7 @@ import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 /**
@@ -31,6 +37,12 @@ import java.util.List;
  */
 public class FollowFragment extends Fragment implements GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener {
+
+    final static private long ONE_SECOND = 1000;
+    final static private long TWENTY_SECONDS = ONE_SECOND * 20;
+    PendingIntent pi;
+    BroadcastReceiver br;
+    AlarmManager am;
 
     public LocationRequest locationRequest;
     public GoogleApiClient googleApiClient;
@@ -78,11 +90,19 @@ public class FollowFragment extends Fragment implements GoogleApiClient.Connecti
                 popup();
             }
         } catch (Settings.SettingNotFoundException e) {
-            e.printStackTrace();
-        }
+            e.printStackTrace();        }
+
+        //start serive
+        AlarmManager alarmManager = (AlarmManager)getContext().getSystemService(Context.ALARM_SERVICE);
+        Intent alarmIntent = new Intent(getContext(), SafeService.class);
+        PendingIntent pending = PendingIntent.getService(getContext(), 0, alarmIntent, 0);
+        alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime() + 10 * 1000, pending);
 
 
         return view;
+    }
+
+    private void getSystemService(String alarmService) {
     }
 
     public int getLocationMode(Context context) throws Settings.SettingNotFoundException {
@@ -230,6 +250,10 @@ public class FollowFragment extends Fragment implements GoogleApiClient.Connecti
             Toast.makeText(getContext(), "sms did not send", Toast.LENGTH_LONG).show();
         }
     }
+
+
+
+
 
 
 }
