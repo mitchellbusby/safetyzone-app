@@ -1,6 +1,7 @@
 package com.safetyzone.safetyzone;
 
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.DrawerLayout;
@@ -11,6 +12,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -28,7 +30,7 @@ public class GeneralActivity extends AppCompatActivity{
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mDrawerToggle;
     private List<String> mDrawerList;
-
+    private List<Drawable> mIconList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,16 +75,18 @@ public class GeneralActivity extends AppCompatActivity{
     }
     public void initialiseNavigationLinks() {
         mDrawerList = new ArrayList<String>();
+        mIconList = new ArrayList<Drawable>();
 
         // This should be dynamically generated somehow or based on something other than code
         mDrawerList.add("Home");
         mDrawerList.add("Follow Me");
+        mDrawerList.add("Information");
         mDrawerList.add("Contacts");
-        mDrawerList.add("Safety Tips");
 
         ListView mDrawerListView = (ListView) findViewById(R.id.nav_list);
-        ListAdapter drawerListAdapter = new ArrayAdapter<String>(getBaseContext(), R.layout.list_style_navigation, R.id.list_navigation_item, mDrawerList);
+        ListAdapter drawerListAdapter = new GeneralAdapter<String>(getBaseContext(), R.layout.list_style_navigation, R.id.list_navigation_item, mDrawerList);
 
+        
         mDrawerListView.setAdapter(drawerListAdapter);
         mDrawerListView.setOnItemClickListener(new DrawerItemClickListener());
 
@@ -102,7 +106,7 @@ public class GeneralActivity extends AppCompatActivity{
                 break;
             case "Follow Me": chosenFragment = new FollowFragment();
                 break;
-            case "Safety Tips": chosenFragment = new safetytipFragment();
+            case "Information": chosenFragment = new safetytipFragment();
                 break;
             default:
                 break;
