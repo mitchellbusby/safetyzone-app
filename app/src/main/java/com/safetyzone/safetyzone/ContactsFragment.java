@@ -36,7 +36,17 @@ public class ContactsFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_contacts, container, false);
         TextView designatedContact = (TextView) view.findViewById(R.id.designated_contact);
 
-        designatedContact.setText("Not Specified");
+
+        List<ContactData> contactDataList = ContactDatabaseHelper.get(getContext()).getContactDataList(null);
+        //contactDataList.get(0).isDesignated();
+
+        for (int i=0; i<contactDataList.size(); i++) {
+            if (contactDataList.get(i).isDesignated()==1) {
+                designatedContact.setText(" "+contactDataList.get(i).getmName());
+            }
+
+
+        }
 
         setupList(view);
         this.view = view;
@@ -67,6 +77,10 @@ public class ContactsFragment extends Fragment {
 
         List<ContactData> contactDataList = ContactDatabaseHelper.get(getContext()).getContactDataList(null);
         //contactDataList.get(0).isDesignated();
+
+         for (int i=0; i<contactDataList.size(); i++) {
+            System.out.println(contactDataList.get(i));
+        }
 
 
         if (contactDataList.size() < SafetyzoneApplication.getContactlimit()) {
