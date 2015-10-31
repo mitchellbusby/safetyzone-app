@@ -34,10 +34,12 @@ public class ContactsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_contacts, container, false);
+        TextView designatedContact = (TextView) view.findViewById(R.id.designated_contact);
+
+        designatedContact.setText("Not Specified");
+
         setupList(view);
         this.view = view;
-
-
         return view;
     }
 

@@ -6,6 +6,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -74,6 +75,7 @@ public class GeneralActivity extends AppCompatActivity{
         mDrawerList = new ArrayList<String>();
 
         // This should be dynamically generated somehow or based on something other than code
+        mDrawerList.add("Home");
         mDrawerList.add("Follow Me");
         mDrawerList.add("Contacts");
         mDrawerList.add("Safety Tips");
@@ -94,6 +96,8 @@ public class GeneralActivity extends AppCompatActivity{
     public void changeFragment(String fragmentName) {
         Fragment chosenFragment = null;
         switch (fragmentName) {
+            case "Home": chosenFragment = new HomeFragment();
+                break;
             case "Contacts": chosenFragment = new ContactsFragment();
                 break;
             case "Follow Me": chosenFragment = new FollowFragment();
@@ -131,4 +135,12 @@ public class GeneralActivity extends AppCompatActivity{
             changeFragment(mDrawerList.get(position));
         }
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu, menu);
+        return true;
+    }
+
 }
