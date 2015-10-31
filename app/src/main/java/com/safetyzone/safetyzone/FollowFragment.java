@@ -8,10 +8,10 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Color;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
-import android.os.SystemClock;
 import android.provider.Settings;
 import android.support.v4.app.Fragment;
 import android.telephony.SmsManager;
@@ -29,10 +29,7 @@ import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
-
-import static java.lang.Long.parseLong;
 
 /**
  * Created by mitchellbusby on 3/10/2015.
@@ -92,33 +89,37 @@ public class FollowFragment extends Fragment implements GoogleApiClient.Connecti
                 popup();
             }
         } catch (Settings.SettingNotFoundException e) {
-            e.printStackTrace();        }
+            e.printStackTrace();
+        }
 
         //start serive
-        AlarmManager alarmManager = (AlarmManager)getContext().getSystemService(Context.ALARM_SERVICE);
-        Intent alarmIntent = new Intent(getContext(), SafeService.class);
-        alarmIntent.putExtra("longtext", parseLong(latitudeText));
-        alarmIntent.putExtra("lattext",parseLong(longitudeText));
-        PendingIntent pending = PendingIntent.getService(getContext(), 0, alarmIntent, 0);
-        //alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime() + 10 * 1000, pending);
-        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), 1000 * 10 * 1, pending); // Millisec * Second * Minute
-        Log.i("after call", "point reached");
 
 
         return view;
     }
 
-
     private BroadcastReceiver SafetyRating = new BroadcastReceiver() {
         @Override
-        public void onReceive(Context context, Intent intent)
-        {
+        public void onReceive(Context context, Intent intent) {
             int number = intent.getIntExtra("rating", 0);
-            TextView saferating = (TextView) getView().findViewById(R.id.title);
-            saferating.setText("you are in a " + number + " Safety zone");
+            TextView saferating = (TextView) getView().findViewById(R.id.safetyrating);
+            saferating.setText(" " + number);
+
+            if (number > 80) {
+                saferating.setTextColor(Color.parseColor("green"));
+
+            } else if (number > 50) {
+                saferating.setTextColor(Color.parseColor("yellow"));
+
+            } else if (number > 0) {
+                saferating.setTextColor(Color.parseColor("green"));
+
+            }
+
 
         }
     };
+
 
     private void getSystemService(String alarmService) {
     }
@@ -185,6 +186,8 @@ public class FollowFragment extends Fragment implements GoogleApiClient.Connecti
             latitudeTv.setText(latitudeText);
             longditudeTV.setText(longitudeText);
 
+            startService();
+
 
         } else {
             latitudeText = "33.8650";
@@ -199,6 +202,18 @@ public class FollowFragment extends Fragment implements GoogleApiClient.Connecti
         TextView latitudeTv = (TextView) view.findViewById(R.id.longitudeTextView);
         latitudeTv.setText(latitudeText);
         longditudeTV.setText(longitudeText); */
+    }
+
+
+    public void startService() {
+        AlarmManager alarmManager = (AlarmManager) getContext().getSystemService(Context.ALARM_SERVICE);
+        Intent alarmIntent = new Intent(getContext(), SafeService.class);
+        alarmIntent.putExtra("lattext", latitudeText);
+        alarmIntent.putExtra("longtext", longitudeText);
+        PendingIntent pending = PendingIntent.getService(getContext(), 0, alarmIntent, 0);
+        //alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime() + 10 * 1000, pending);
+        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), 1000 * 10 * 2, pending); // Millisec * Second * Minute
+        Log.i("after call", "point reached");
     }
 
     @Override
@@ -270,8 +285,22 @@ public class FollowFragment extends Fragment implements GoogleApiClient.Connecti
     }
 
 
+    @Override
+    public void onStart() {
+        super.onStart();
 
+        IntentFilter filter = new IntentFilter();
+        filter.addAction("rating");
+        getActivity().registerReceiver(SafetyRating, filter);
 
+    }
+
+    @Override
+    public void onStop() {
+        super.onStart();
+        getActivity().unregisterReceiver(SafetyRating);
+
+    }
 
 
 }

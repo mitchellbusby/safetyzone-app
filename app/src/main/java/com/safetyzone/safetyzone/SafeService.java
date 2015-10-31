@@ -46,9 +46,10 @@ public class SafeService extends IntentService {
     protected void onHandleIntent(Intent intent) {
 
         Log.i("Service", "Service called");
-
-        long longtext = intent.getLongExtra("longtext", 1);
-        long lattext = intent.getLongExtra("lattext", 2);
+        String l = intent.getStringExtra("longtext");
+        String x = intent.getStringExtra("lattext");
+        double longtext = Double.parseDouble(l);
+        double lattext = Double.parseDouble(x);
 
         int returnData = getSafetyRating(longtext, lattext);
 
@@ -79,6 +80,7 @@ public class SafeService extends IntentService {
         catch (JSONException e) { resultAsJson = null; }
         return new Random().nextInt(3);
     }
+
     public String getData(double longitude, double latitude) {
         //return "";
         try {
