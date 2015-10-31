@@ -1,5 +1,7 @@
 package com.safetyzone.safetyzone;
 
+import android.os.StrictMode;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -18,18 +20,25 @@ import java.util.Random;
 public class SafeService {
     public SafeService() {
         // Do nothing inside the constructor just yet
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+
+        StrictMode.setThreadPolicy(policy);
     }
     public int getSafetyRating(double longitude, double latitude) {
         String result = getData(longitude, latitude);
         JSONObject resultAsJson = null;
-        try { resultAsJson = new JSONObject(result); }
+        try {
+            resultAsJson = new JSONObject(result);
+            return resultAsJson.getInt("CrimeRatingIndex");
+        }
         catch (JSONException e) { resultAsJson = null; }
         return new Random().nextInt(3);
     }
     public String getData(double longitude, double latitude) {
         //return "";
         try {
-            URL url = new URL("http://safetyzone.azurewebsites.net/api/CrimeStats?latitude={0}&longitude={1}".format(String.valueOf(latitude), String.valueOf(longitude)));
+            String urlString = String.format("http://safetyzone.azurewebsites.net/api/CrimeStats?latitude=%s&longitude=%s", String.valueOf(latitude), String.valueOf(longitude));
+            URL url = new URL(urlString);
             HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
             InputStream inputStream = new BufferedInputStream(urlConnection.getInputStream());
             BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));

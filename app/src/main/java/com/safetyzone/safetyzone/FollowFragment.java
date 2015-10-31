@@ -146,8 +146,6 @@ public class FollowFragment extends Fragment implements GoogleApiClient.Connecti
             TextView latitudeTv = (TextView) view.findViewById(R.id.longitudeTextView);
             latitudeTv.setText(latitudeText);
             longditudeTV.setText(longitudeText);
-            SafeService safeService = new SafeService();
-            String result = safeService.getData(lastLocation.getLongitude(), lastLocation.getLatitude());
 
 
         } else {
