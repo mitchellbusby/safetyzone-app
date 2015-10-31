@@ -14,18 +14,21 @@ public class ContactData implements Serializable {
     public static final String COLUMN_NAME = "name";
     public static final String COLUMN_NUMBER = "number"; //number?
     public static final String COLUMN_CONTACT_SINCE = "contact_since";
-    public static final String[] COLUMNS = {COLUMN_ID, COLUMN_NAME, COLUMN_NUMBER, COLUMN_CONTACT_SINCE};
+    public static final String COLUMN_DESIGNATED = "contact_since";
+    public static final String[] COLUMNS = {COLUMN_ID, COLUMN_NAME, COLUMN_NUMBER, COLUMN_CONTACT_SINCE, COLUMN_DESIGNATED};
 
     private int mId;
     private String mName;
     private String mNumber;
-    private long mContactSince; //cant do int
+    private long mContactSince;
+    private int mDesignated;//cant do int
 
-    public ContactData(int id, String name, String number, long contactSince) {
+    public ContactData(int id, String name, String number, long contactSince, int designated) {
         mId = id;
         mName = name;
         mNumber = number;
         mContactSince = contactSince;
+        mDesignated = designated;
     }
 
     /**
@@ -36,6 +39,7 @@ public class ContactData implements Serializable {
         mName = cursor.getString(cursor.getColumnIndex(COLUMN_NAME));
         mNumber = cursor.getString(cursor.getColumnIndex(COLUMN_NUMBER));
         mContactSince = cursor.getLong(cursor.getColumnIndex(COLUMN_CONTACT_SINCE));
+        mDesignated = cursor.getInt(cursor.getColumnIndex(COLUMN_DESIGNATED));
     }
 
     public String getmName() {
@@ -68,6 +72,14 @@ public class ContactData implements Serializable {
 
     public void setmContactSince(long mContactSince) {
         this.mContactSince = mContactSince;
+    }
+
+//    public void setDesignated() {
+//        mDesignated=0;
+//    }
+
+    public int isDesignated() {
+        return mDesignated;
     }
 
 

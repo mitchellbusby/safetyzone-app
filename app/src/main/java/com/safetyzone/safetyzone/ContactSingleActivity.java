@@ -1,27 +1,37 @@
 package com.safetyzone.safetyzone;
 
+/**
+ * Created by BeckLyons on 1/11/2015.
+ */
+
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import java.util.Calendar;
 
 /**
- * Created by Zak on 7/10/2015.
+ * Created by BeckLyons on 1/11/2015.
  */
-public class AddContactActivity extends ActionBarActivity {
+public class ContactSingleActivity extends ActionBarActivity {
 
     int checked=0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_contact_data);
+        setContentView(R.layout.single_contact_activity);
+
+        popup();
     }
 
     /**
@@ -54,7 +64,7 @@ public class AddContactActivity extends ActionBarActivity {
             EditText number = (EditText) findViewById(R.id.add_contact_number_edittext);
             EditText name = (EditText) findViewById(R.id.add_contact_name_edittext);
             //CheckBox checkBox = (CheckBox) findViewById(R.id.checkbox_assigned);
-//
+            //
             //String numberPadded = "";
             //int realNumber = 0;
 
@@ -106,5 +116,39 @@ public class AddContactActivity extends ActionBarActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public void popup() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+        // Set Alert Dialog Title
+        builder.setTitle("New Designated Contact");
+
+        // Set an Icon for this Alert Dialog
+        //builder.setIcon(R.drawable.icon1);
+
+        // Set Alert Dialog Message
+        builder.setMessage("Are you sure you want to add this contact as a designated contact? Any previously selected designted contacts will be removed.")
+
+                .setNegativeButton("Yes", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int arg0) {
+
+                        checked=1;
+                    }
+                })
+
+                .setPositiveButton("No", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int arg0) {
+
+                        dialog.cancel();
+                    }
+                })
+        ;
+
+        // Create the Alert Dialog
+        AlertDialog alertdialog = builder.create();
+
+        // Show Alert Dialog
+        alertdialog.show();
     }
 }

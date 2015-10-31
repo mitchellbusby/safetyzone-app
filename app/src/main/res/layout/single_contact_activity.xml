@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:paddingBottom="10dp"
-        android:text="Add a new contact"
+        android:text="Edit Contact"
         android:textSize="20dp"
         android:textStyle="bold" />
 
@@ -29,11 +29,11 @@
                 android:layout_height="wrap_content"
                 android:text="@string/contact_name" />
 
-            <EditText
-                android:id="@+id/add_contact_name_edittext"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="e.g. jonh smith" />
+            <!--<EditText-->
+                <!--android:id="@+id/add_contact_name_edittext"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:hint="e.g. jonh smith" />-->
         </TableRow>
 
         <TableRow>
@@ -43,12 +43,12 @@
                 android:layout_height="wrap_content"
                 android:text="@string/contact_number" />
 
-            <EditText
-                android:id="@+id/add_contact_number_edittext"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="e.g. 0411223344"
-                android:inputType="number" />
+            <!--<EditText-->
+                <!--android:id="@+id/add_contact_number_edittext"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:hint="e.g. 0411223344"-->
+                <!--android:inputType="number" />-->
         </TableRow>
 
 
@@ -61,16 +61,16 @@
         android:layout_below="@+id/add_contact_form_tablelayout"
         android:orientation="horizontal"
         >
-    <CheckBox
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:onClick="onAssigned"
-        android:layout_below="@+id/checkbox_assigned"
-        android:textColorHighlight="@color/color_primary_dark"/>
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/assign" />
+        <CheckBox
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="onAssigned"
+            android:layout_below="@+id/checkbox_assigned"
+            android:textColorHighlight="@color/color_primary_dark"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/assign" />
     </LinearLayout>
 
     <LinearLayout
@@ -80,19 +80,19 @@
         android:layout_alignParentBottom="true"
         android:orientation="horizontal">
 
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:onClick="onCancelClicked"
-            android:text="@string/cancel" />
+        <!--<Button-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_weight="1"-->
+            <!--android:onClick="onCancelClicked"-->
+            <!--android:text="@string/cancel" />-->
 
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:onClick="onAddClicked"
-            android:text="@string/add_contact" />
+            android:text="Save" />
     </LinearLayout>
 
 </RelativeLayout>
