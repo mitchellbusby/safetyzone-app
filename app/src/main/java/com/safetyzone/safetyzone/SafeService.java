@@ -9,6 +9,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.util.Log;
 import android.widget.Toast;
 import android.os.StrictMode;
 
@@ -44,7 +45,16 @@ public class SafeService extends IntentService {
     @Override
     protected void onHandleIntent(Intent intent) {
 
+        Log.i("Service", "Service called");
 
+        long longtext = intent.getLongExtra("longtext", 1);
+        long lattext = intent.getLongExtra("lattext", 2);
+
+        int returnData = getSafetyRating(longtext, lattext);
+
+        Intent safettyrating = new Intent("rating");
+        safettyrating.putExtra("rating", returnData);
+        sendBroadcast(new Intent(safettyrating));
     }
 
 
@@ -60,10 +70,10 @@ public class SafeService extends IntentService {
 }
      */
     public int getSafetyRating(double longitude, double latitude) {
-        String result = getData(longitude, latitude);
+        String result = getData(longitude, latitude); //sending the long and land
         JSONObject resultAsJson = null;
         try {
-            resultAsJson = new JSONObject(result);
+            resultAsJson = new JSONObject(result); //native jaav object
             return resultAsJson.getInt("CrimeRatingIndex");
         }
         catch (JSONException e) { resultAsJson = null; }
@@ -75,6 +85,7 @@ public class SafeService extends IntentService {
             String urlString = String.format("http://safetyzone.azurewebsites.net/api/CrimeStats?latitude=%s&longitude=%s", String.valueOf(latitude), String.valueOf(longitude));
             URL url = new URL(urlString);
             HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+
             InputStream inputStream = new BufferedInputStream(urlConnection.getInputStream());
             BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
             String line = null;

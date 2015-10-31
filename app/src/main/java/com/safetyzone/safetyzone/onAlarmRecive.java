@@ -15,6 +15,11 @@ public class onAlarmRecive extends BroadcastReceiver {
 
         Log.d("test", "BroadcastReceiver, in onReceive:");
 
+        String longtext = intent.getStringExtra("longtext");
+        String lattext = intent.getStringExtra("lattext");
+
+
+
         // Start the general activty
         //Intent i = new Intent(context, GeneralActivity.class);
         //i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

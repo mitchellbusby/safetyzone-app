@@ -32,6 +32,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+import static java.lang.Long.parseLong;
+
 /**
  * Created by mitchellbusby on 3/10/2015.
  */
@@ -95,12 +97,28 @@ public class FollowFragment extends Fragment implements GoogleApiClient.Connecti
         //start serive
         AlarmManager alarmManager = (AlarmManager)getContext().getSystemService(Context.ALARM_SERVICE);
         Intent alarmIntent = new Intent(getContext(), SafeService.class);
+        alarmIntent.putExtra("longtext", parseLong(latitudeText));
+        alarmIntent.putExtra("lattext",parseLong(longitudeText));
         PendingIntent pending = PendingIntent.getService(getContext(), 0, alarmIntent, 0);
-        alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime() + 10 * 1000, pending);
+        //alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime() + 10 * 1000, pending);
+        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), 1000 * 10 * 1, pending); // Millisec * Second * Minute
+        Log.i("after call", "point reached");
 
 
         return view;
     }
+
+
+    private BroadcastReceiver SafetyRating = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent)
+        {
+            int number = intent.getIntExtra("rating", 0);
+            TextView saferating = (TextView) getView().findViewById(R.id.title);
+            saferating.setText("you are in a " + number + " Safety zone");
+
+        }
+    };
 
     private void getSystemService(String alarmService) {
     }
