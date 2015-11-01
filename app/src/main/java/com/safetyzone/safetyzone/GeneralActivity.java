@@ -30,7 +30,6 @@ public class GeneralActivity extends AppCompatActivity{
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mDrawerToggle;
     private List<String> mDrawerList;
-    private List<Drawable> mIconList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,7 +74,6 @@ public class GeneralActivity extends AppCompatActivity{
     }
     public void initialiseNavigationLinks() {
         mDrawerList = new ArrayList<String>();
-        mIconList = new ArrayList<Drawable>();
 
         // This should be dynamically generated somehow or based on something other than code
         mDrawerList.add("Home");
