@@ -30,5 +30,15 @@
         android:layout_marginRight="30dp"
         android:layout_marginBottom="30dp"/>
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Follow me is off"
+        android:textColor="@color/grey"
+        android:id="@+id/followstatus"
+        android:layout_marginTop="50dp"
+        android:layout_gravity="center_horizontal|top" />
+
 
 </FrameLayout>

@@ -2,10 +2,13 @@ package com.safetyzone.safetyzone;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.graphics.Color;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.support.v4.app.Fragment;
 import android.telephony.SmsManager;
 import android.util.Log;
@@ -13,8 +16,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
-
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
@@ -35,6 +38,8 @@ public class FollowMeFragment extends Fragment implements OnMapReadyCallback {
 
     private GoogleMap mMap;
 
+    boolean followme = false;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_follow_me, container, false);
@@ -42,36 +47,30 @@ public class FollowMeFragment extends Fragment implements OnMapReadyCallback {
 
         int isAvailable = GooglePlayServicesUtil.isGooglePlayServicesAvailable(getContext());
 
-        if(isAvailable == ConnectionResult.SUCCESS)
-        {
-            SupportMapFragment mapFragment = (SupportMapFragment)getChildFragmentManager().findFragmentById(R.id.map);
+        if (isAvailable == ConnectionResult.SUCCESS) {
+            SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
             mapFragment.getMapAsync(this);
-        }
-        else if(GooglePlayServicesUtil.isUserRecoverableError(isAvailable))
-        {
+        } else if (GooglePlayServicesUtil.isUserRecoverableError(isAvailable)) {
             //if the connection is is not successful, it checks if that connection result is recoverable.
             Dialog dialog = GooglePlayServicesUtil.getErrorDialog(isAvailable, getActivity(), 937);
             dialog.show();
-        }
-        else
-        {
+        } else {
             //if cant connect for other reasons it will inform the user
             Toast.makeText(getContext(), "Can't connect to Google Play services", Toast.LENGTH_SHORT).show();
         }
-
-
 
 
         Button button = (Button) view.findViewById(R.id.followOn);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                SafetyzoneApplication safetyzoneApplication = SafetyzoneApplication.get();
-                Toast.makeText(getContext(), "Sending sms...", Toast.LENGTH_LONG).show();
-                String defaultMessage1 = "Dear friend, I am traveling on a dangerous road and would like you to " +
-                        "ensure my safety through following me. If I do not send you a text in the next hour confirming my arrival" +
-                        "at the destination, please know I have reach my wicked end. last known location "+ safetyzoneApplication.getLastlocation().getLatitude() + " " + safetyzoneApplication.getLastlocation().getLongitude() ;
-                sendSMSMessage(defaultMessage1);
+                popup();
+                followme = true;
+
+                TextView followstat = (TextView) getView().findViewById(R.id.followstatus);
+                followstat.setText("Follow me is on");
+                followstat.setTextColor(Color.parseColor("green"));
+
             }
         });
 
@@ -79,11 +78,22 @@ public class FollowMeFragment extends Fragment implements OnMapReadyCallback {
         button2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getContext(), "Sending sms...", Toast.LENGTH_LONG).show();
-                String defaultMessage2 = "I SURVIVED, I AM LEGEND";
-                sendSMSMessage(defaultMessage2);
+                if (followme) {
+                    Toast.makeText(getContext(), "Sending sms...", Toast.LENGTH_LONG).show();
+                    String defaultMessage2 = "I SURVIVED, I AM LEGEND";
+                    sendSMSMessage(defaultMessage2);
+
+                    TextView followstat = (TextView) getView().findViewById(R.id.followstatus);
+                    followstat.setText("Follow me is off");
+                    followstat.setTextColor(Color.parseColor("grey"));
+
+                    followme = false;
+                }
+
             }
         });
+
+
 
         return view;
     }
@@ -100,9 +110,7 @@ public class FollowMeFragment extends Fragment implements OnMapReadyCallback {
             mMap.addMarker(new MarkerOptions().position(you).title("Be safe, alert contacts where you are"));
             //mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
             mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(safetyzoneApplication.getLastlocation().getLatitude(), safetyzoneApplication.getLastlocation().getLongitude()), 14.0f));
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             LatLng sydney = new LatLng(-34, 151);
             mMap.addMarker(new MarkerOptions().position(sydney).title("SafeZone"));
         }
@@ -115,24 +123,29 @@ public class FollowMeFragment extends Fragment implements OnMapReadyCallback {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
 
         // Set Alert Dialog Title
-        builder.setTitle("Your location is not enabled");
+        builder.setTitle("Confirm follow me sms");
 
         // Set an Icon for this Alert Dialog
         //builder.setIcon(R.drawable.icon1);
 
         // Set Alert Dialog Message
-        builder.setMessage("Do you want to turn on location services?")
+        builder.setMessage("Do you want to alert designated contact?")
 
                 .setNegativeButton("Yes", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int arg0) {
 
-                        startActivity(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS));
+                        SafetyzoneApplication safetyzoneApplication = SafetyzoneApplication.get();
+                        Toast.makeText(getContext(), "Sending sms...", Toast.LENGTH_LONG).show();
+                        String defaultMessage1 = "Dear friend, I am traveling on a dangerous road and would like you to " +
+                                "ensure my safety through following me. If I do not send you a text in the next hour confirming my arrival" +
+                                "at the destination, please know I have reach my wicked end. last known location " + safetyzoneApplication.getLastlocation().getLatitude() + " " + safetyzoneApplication.getLastlocation().getLongitude();
+                        sendSMSMessage(defaultMessage1);
                     }
                 })
 
                 .setPositiveButton("No", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int arg0) {
-                        Toast.makeText(getContext(), "you are not safe...", Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(getContext(), "you are not safe...", Toast.LENGTH_SHORT).show();
                         dialog.cancel();
                     }
                 })
@@ -153,14 +166,13 @@ public class FollowMeFragment extends Fragment implements OnMapReadyCallback {
         ArrayList<String> numbers = new ArrayList<>();
         for (ContactData contactData : contactDataList) {
 
-            if(contactData.isDesignated() == 1)
-            {
-                //numbers.add(contactData.getmNumber());
-                Toast.makeText(getContext(), contactData.getmNumber(), Toast.LENGTH_SHORT).show();
+            if (contactData.isDesignated() == 1) {
+                numbers.add(contactData.getmNumber());
+                //Toast.makeText(getContext(), contactData.getmNumber(), Toast.LENGTH_SHORT).show();
             }
 
         }
-        /*
+
 
         try {
             for (String number : numbers) {
@@ -170,7 +182,43 @@ public class FollowMeFragment extends Fragment implements OnMapReadyCallback {
             }
         } catch (Exception e) {
             Toast.makeText(getContext(), "sms did not send", Toast.LENGTH_LONG).show();
-        } */
+        }
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        getActivity().registerReceiver(this.mBatInfoReceiver, new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
+    }
+
+    private BroadcastReceiver mBatInfoReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context arg0, Intent intent) {
+
+            int level = intent.getIntExtra("level", 0);
+            Log.e("test", String.valueOf(level) + "%");
+
+            if(followme)
+            {
+                if(level < 10)
+                {
+                    SafetyzoneApplication safetyzoneApplication = SafetyzoneApplication.get();
+                    String batmessage =" Hey, My battery is running low I am currently at " + safetyzoneApplication.getLastlocation().getLatitude() + " " + safetyzoneApplication.getLastlocation().getLongitude();
+                    sendSMSMessage(batmessage);
+                    followme = false;
+                }
+
+            }
+
+        }
+    };
+
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        // unregister receiver
+        getActivity().unregisterReceiver(this.mBatInfoReceiver);
     }
 
 

@@ -275,7 +275,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Goog
 
     @Override
     public void onStop() {
-        super.onStart();
+        super.onStop();
         getActivity().unregisterReceiver(SafetyRating);
 
     }

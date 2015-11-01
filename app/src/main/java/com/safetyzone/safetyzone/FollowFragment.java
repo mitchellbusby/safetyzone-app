@@ -57,6 +57,8 @@ public class FollowFragment extends Fragment implements GoogleApiClient.Connecti
     public static String longitudeText = "test2";
     public View view;
 
+
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_follow_me, container, false);
@@ -97,6 +99,7 @@ public class FollowFragment extends Fragment implements GoogleApiClient.Connecti
         Intent alarmIntent = new Intent(getContext(), SafeService.class);
         PendingIntent pending = PendingIntent.getService(getContext(), 0, alarmIntent, 0);
         alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime() + 10 * 1000, pending);
+
 
 
         return view;
