@@ -62,16 +62,10 @@
         android:id="@+id/designated_contact"
         />
         </LinearLayout>
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="check"
-        android:id="@+id/single"
 
-        />
 
     <ListView
-        android:layout_width="wrap_content"
+        android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:id="@+id/contacts_list">
     </ListView>

@@ -29,11 +29,11 @@
                 android:layout_height="wrap_content"
                 android:text="@string/contact_name" />
 
-            <!--<EditText-->
-                <!--android:id="@+id/add_contact_name_edittext"-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:hint="e.g. jonh smith" />-->
+            <EditText
+                android:id="@+id/add_contact_name_edittext"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="e.g. jonh smith" />
         </TableRow>
 
         <TableRow>
@@ -43,12 +43,12 @@
                 android:layout_height="wrap_content"
                 android:text="@string/contact_number" />
 
-            <!--<EditText-->
-                <!--android:id="@+id/add_contact_number_edittext"-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:hint="e.g. 0411223344"-->
-                <!--android:inputType="number" />-->
+            <EditText
+                android:id="@+id/add_contact_number_edittext"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="e.g. 0411223344"
+                android:inputType="number" />
         </TableRow>
 
 
@@ -62,11 +62,13 @@
         android:orientation="horizontal"
         >
         <CheckBox
+            android:textColorSecondary="@color/BLACK"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:onClick="onAssigned"
-            android:layout_below="@+id/checkbox_assigned"
-            android:textColorHighlight="@color/color_primary_dark"/>
+            android:id="@+id/checkbox_assigned"
+            android:onClick="onChecked"
+
+            />
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -91,7 +93,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:onClick="onAddClicked"
+            android:onClick="onDiscard"
+            android:text="discard" />
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:onClick="onSaved"
             android:text="Save" />
     </LinearLayout>
 

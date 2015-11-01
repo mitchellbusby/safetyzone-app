@@ -15,24 +15,53 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import java.util.Calendar;
+import java.util.List;
 
 /**
  * Created by BeckLyons on 1/11/2015.
  */
 public class ContactSingleActivity extends ActionBarActivity {
 
+    String contactName;
+    String contactNumber;
+    int contactDesignated;
+    int contactId;
+
     int checked=0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.single_contact_activity);
+        Bundle bundle = getIntent().getExtras();
+        contactName = bundle.getString("name");
+        contactNumber = bundle.getString("number");
+        contactDesignated = bundle.getInt("deso");
+        contactId= bundle.getInt("id");
+        updateProfile();
 
-        popup();
     }
+
+    private void updateProfile() {
+        EditText number = (EditText) findViewById(R.id.add_contact_number_edittext);
+        EditText name = (EditText) findViewById(R.id.add_contact_name_edittext);
+        CheckBox check = (CheckBox) findViewById(R.id.checkbox_assigned);
+
+        name.setText("" +contactName);
+        number.setText("" + contactNumber);
+
+        if (contactDesignated==1) {
+            check.setChecked(true);
+        }
+        else {
+            check.setChecked(false);
+        }
+    }
+
 
     /**
      * Callback for the cancel button which takes the user back to the main activity.
@@ -42,14 +71,37 @@ public class ContactSingleActivity extends ActionBarActivity {
         finish();
     }
 
-    /*button for assigning contact */
-    public void onAssigned(View view) {
+
+
+    //    /*button for assigning contact */
+    public void onChecked(View view) {
         if (checked==1) {
             checked = 0;
         } else {
             checked=1;
         }
     }
+
+    /*button for saving contact */
+    public void onSaved(View view) {
+        /*notify user of making new deso contact*/
+        EditText number = (EditText) findViewById(R.id.add_contact_number_edittext);
+        EditText name = (EditText) findViewById(R.id.add_contact_name_edittext);
+
+
+        if (checked==1) {
+            popup(name.getText().toString());}
+        else {
+            finish(); }
+
+
+
+    }
+
+    public void onDiscard(View view) {
+        finish();
+    }
+
 
     /**
      * Callback for the add button which adds a new bus data row to the database and returns
@@ -63,6 +115,10 @@ public class ContactSingleActivity extends ActionBarActivity {
 
             EditText number = (EditText) findViewById(R.id.add_contact_number_edittext);
             EditText name = (EditText) findViewById(R.id.add_contact_name_edittext);
+
+            contactName = name.getText().toString();
+
+
             //CheckBox checkBox = (CheckBox) findViewById(R.id.checkbox_assigned);
             //
             //String numberPadded = "";
@@ -79,8 +135,9 @@ public class ContactSingleActivity extends ActionBarActivity {
 
             if (number.getText().toString().length() == 10) {
                 //check checkbox
-                ContactData contactData = new ContactData(0, name.getText().toString(), number.getText().toString(), dateInMillisecond, checked);
-                ContactDatabaseHelper.get(this).addContact(contactData);
+//                ContactData contactData = new ContactData(0, name.getText().toString(), number.getText().toString(), dateInMillisecond, checked);
+//                ContactDatabaseHelper.get(this).addContact(contactData);
+                contactName = name.getText().toString();
                 finish();
 
             } else {
@@ -118,7 +175,7 @@ public class ContactSingleActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void popup() {
+    public void popup(final String newName) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
         // Set Alert Dialog Title
@@ -128,19 +185,21 @@ public class ContactSingleActivity extends ActionBarActivity {
         //builder.setIcon(R.drawable.icon1);
 
         // Set Alert Dialog Message
-        builder.setMessage("Are you sure you want to add this contact as a designated contact? Any previously selected designted contacts will be removed.")
+        builder.setMessage("Are you sure you want to add this contact as a designated contact? Any previously selected designated contacts will be removed.")
 
-                .setNegativeButton("Yes", new DialogInterface.OnClickListener() {
+                .setNegativeButton("No", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int arg0) {
-
-                        checked=1;
+                        dialog.cancel();
                     }
                 })
 
-                .setPositiveButton("No", new DialogInterface.OnClickListener() {
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int arg0) {
-
-                        dialog.cancel();
+                        List<ContactData> contactDataList = ContactDatabaseHelper.get(getApplicationContext()).getContactDataList(null);
+                        contactDataList.get(0).setmName(newName);
+//                        ContactData contactData = new ContactData(0, contactName,contactNumber, 2, checked);
+//                        ContactDatabaseHelper.get(getApplicationContext()).addContact(contactData);
+                        finish();
                     }
                 })
         ;
@@ -150,5 +209,7 @@ public class ContactSingleActivity extends ActionBarActivity {
 
         // Show Alert Dialog
         alertdialog.show();
+
+
     }
 }

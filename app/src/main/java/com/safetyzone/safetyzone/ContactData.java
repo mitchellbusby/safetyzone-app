@@ -78,9 +78,9 @@ public class ContactData implements Serializable {
 //        mDesignated=0;
 //    }
 
-    public int isDesignated() {
-        return mDesignated;
-    }
+    public int isDesignated() { return mDesignated; }
+
+    public  void resetDesignated() { this.mDesignated=0;  }
 
 
 }

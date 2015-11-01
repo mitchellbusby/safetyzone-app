@@ -11,6 +11,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import java.util.Calendar;
+import java.util.List;
 
 /**
  * Created by Zak on 7/10/2015.
@@ -69,9 +70,22 @@ public class AddContactActivity extends ActionBarActivity {
 
             if (number.getText().toString().length() == 10) {
                 //check checkbox
+
+                List<ContactData> contactDataList = ContactDatabaseHelper.get(this).getContactDataList(null);
+                if (checked==1) {
+
+
+                    for (int i = 0; i < contactDataList.size(); i++) {
+                        if (contactDataList.get(i).isDesignated()==1) {
+                            contactDataList.get(i).resetDesignated();
+                        }
+                    }
+                }
                 ContactData contactData = new ContactData(0, name.getText().toString(), number.getText().toString(), dateInMillisecond, checked);
                 ContactDatabaseHelper.get(this).addContact(contactData);
+
                 finish();
+
 
             } else {
                 Toast.makeText(getApplicationContext(), "Invalid number! Please enter a 10 digit number" , Toast.LENGTH_LONG).show();
