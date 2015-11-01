@@ -56,9 +56,11 @@ public class ContactSingleActivity extends ActionBarActivity {
 
         if (contactDesignated==1) {
             check.setChecked(true);
+            checked = 1;
         }
         else {
             check.setChecked(false);
+            checked = 0;
         }
     }
 
