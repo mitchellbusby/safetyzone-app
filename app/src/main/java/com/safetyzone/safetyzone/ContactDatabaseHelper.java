@@ -63,7 +63,10 @@ public class ContactDatabaseHelper extends SQLiteOpenHelper {
     public void addContact(ContactData contactData)
     {
         SQLiteDatabase db = getWritableDatabase();
-
+        //Clears existing designated
+        if (contactData.isDesignated()==1) {
+            updateClearDesignated();
+        }
         ContentValues values = new ContentValues();
         values.put(ContactData.COLUMN_NAME, contactData.getmName());
         values.put(ContactData.COLUMN_NUMBER, contactData.getmNumber());
@@ -72,19 +75,21 @@ public class ContactDatabaseHelper extends SQLiteOpenHelper {
         db.insertOrThrow(ContactData.TABLE, null, values);
     }
 
-    public void updateSetDesignated(int contactId, boolean isDesignated) {
+    public void updateClearDesignated() {
         SQLiteDatabase db = getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(ContactData.COLUMN_DESIGNATED, false);
-        //db.update(ContactData.TABLE, values);
-        String where_clause = ContactData.COLUMN_ID+" LIKE ?";
-        String[] selectionArgs = {String.valueOf(contactId)};
+        String where_clause = null;
+        String[] selectionArgs = {};
         db.update(ContactData.TABLE, values, where_clause, selectionArgs);
     }
 
     public void updateContact(ContactData contactData) {
         SQLiteDatabase db = getWritableDatabase();
-
+        //Clears existing designated
+        if (contactData.isDesignated()==1) {
+            updateClearDesignated();
+        }
         ContentValues values = new ContentValues();
         values.put(ContactData.COLUMN_NAME, contactData.getmName());
         values.put(ContactData.COLUMN_NUMBER, contactData.getmNumber());
