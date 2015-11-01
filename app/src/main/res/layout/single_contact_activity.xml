@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:paddingBottom="10dp"
-        android:text="Add a new contact"
+        android:text="Edit Contact"
         android:textSize="20dp"
         android:textStyle="bold" />
 
@@ -61,15 +61,18 @@
         android:layout_below="@+id/add_contact_form_tablelayout"
         android:orientation="horizontal"
         >
-    <CheckBox
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:onClick="onAssigned"
-        android:layout_below="@+id/checkbox_assigned"/>
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/assign" />
+        <CheckBox
+            android:textColorSecondary="@color/BLACK"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/checkbox_assigned"
+            android:onClick="onChecked"
+
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/assign" />
     </LinearLayout>
 
     <LinearLayout
@@ -79,19 +82,25 @@
         android:layout_alignParentBottom="true"
         android:orientation="horizontal">
 
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:onClick="onCancelClicked"
-            android:text="@string/cancel" />
+        <!--<Button-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_weight="1"-->
+            <!--android:onClick="onCancelClicked"-->
+            <!--android:text="@string/cancel" />-->
 
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:onClick="onAddClicked"
-            android:text="@string/add_contact" />
+            android:onClick="onDiscard"
+            android:text="discard" />
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:onClick="onSaved"
+            android:text="Save" />
     </LinearLayout>
 
 </RelativeLayout>

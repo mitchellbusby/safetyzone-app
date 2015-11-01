@@ -153,9 +153,14 @@ public class FollowMeFragment extends Fragment implements OnMapReadyCallback {
         ArrayList<String> numbers = new ArrayList<>();
         for (ContactData contactData : contactDataList) {
 
-                numbers.add(contactData.getmNumber());
+            if(contactData.isDesignated() == 1)
+            {
+                //numbers.add(contactData.getmNumber());
+                Toast.makeText(getContext(), contactData.getmNumber(), Toast.LENGTH_SHORT).show();
+            }
 
         }
+        /*
 
         try {
             for (String number : numbers) {
@@ -165,7 +170,7 @@ public class FollowMeFragment extends Fragment implements OnMapReadyCallback {
             }
         } catch (Exception e) {
             Toast.makeText(getContext(), "sms did not send", Toast.LENGTH_LONG).show();
-        }
+        } */
     }
 
 

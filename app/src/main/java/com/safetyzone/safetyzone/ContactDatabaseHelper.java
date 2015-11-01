@@ -63,12 +63,42 @@ public class ContactDatabaseHelper extends SQLiteOpenHelper {
     public void addContact(ContactData contactData)
     {
         SQLiteDatabase db = getWritableDatabase();
-
+        //Clears existing designated
+        if (contactData.isDesignated()==1) {
+            updateClearDesignated();
+        }
         ContentValues values = new ContentValues();
         values.put(ContactData.COLUMN_NAME, contactData.getmName());
         values.put(ContactData.COLUMN_NUMBER, contactData.getmNumber());
         values.put(ContactData.COLUMN_CONTACT_SINCE, contactData.getmContactSince());
+        values.put(ContactData.COLUMN_DESIGNATED, contactData.isDesignated());
         db.insertOrThrow(ContactData.TABLE, null, values);
+    }
+
+    public void updateClearDesignated() {
+        SQLiteDatabase db = getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(ContactData.COLUMN_DESIGNATED, false);
+        String where_clause = null;
+        String[] selectionArgs = {};
+        db.update(ContactData.TABLE, values, where_clause, selectionArgs);
+    }
+
+    public void updateContact(ContactData contactData) {
+        SQLiteDatabase db = getWritableDatabase();
+        //Clears existing designated
+        if (contactData.isDesignated()==1) {
+            updateClearDesignated();
+        }
+        ContentValues values = new ContentValues();
+        values.put(ContactData.COLUMN_NAME, contactData.getmName());
+        values.put(ContactData.COLUMN_NUMBER, contactData.getmNumber());
+        values.put(ContactData.COLUMN_CONTACT_SINCE, contactData.getmContactSince());
+        values.put(ContactData.COLUMN_DESIGNATED, contactData.isDesignated());
+
+        String where_clause = ContactData.COLUMN_ID+" LIKE ?";
+        String[] selectionArgs = {String.valueOf(contactData.getmId())};
+        db.update(ContactData.TABLE, values, where_clause, selectionArgs);
     }
 
     public void removeContact(ContactData contactData)

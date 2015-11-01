@@ -8,6 +8,7 @@
 
     <string name="add_contact">Add Contact</string>
     <string name="cancel">Cancel</string>
+    <string name="assign">Assign this contact as designated contact?</string>
     <string name="Safety">Safety Tips</string>
     <string name="name">Name</string>
     <string name="contact_number_data">0458524011</string>

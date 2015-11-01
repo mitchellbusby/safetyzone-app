@@ -2,25 +2,18 @@ package com.safetyzone.safetyzone;
 
 import android.app.AlarmManager;
 import android.app.AlertDialog;
-import android.app.Notification;
-import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.res.Resources;
-import android.graphics.Color;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.provider.Settings;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.NotificationCompat;
-
 import android.telephony.SmsManager;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -36,38 +29,51 @@ import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 /**
  * Created by mitchellbusby on 3/10/2015.
  */
-public class HomeFragment extends Fragment implements View.OnClickListener, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
+public class FollowFragment extends Fragment implements GoogleApiClient.ConnectionCallbacks,
+        GoogleApiClient.OnConnectionFailedListener {
+
+    final static private long ONE_SECOND = 1000;
+    final static private long TWENTY_SECONDS = ONE_SECOND * 20;
+    PendingIntent pi;
+    BroadcastReceiver br;
+    AlarmManager am;
 
     public LocationRequest locationRequest;
     public GoogleApiClient googleApiClient;
     public LocationManager locationManager;
 
+    String defaultMessage;
+
+    //LocationClient mLocationClient;
+
     public Location lastLocation;
     public static String latitudeText = "test3";
     public static String longitudeText = "test2";
-
     public View view;
-    Button startButton;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_home, container, false);
+        View view = inflater.inflate(R.layout.fragment_follow_me, container, false);
         this.view = view;
 
         buildGoogleApiClient();
         googleApiClient.connect();
 
+        //getLastKnownLocation();
         locationRequest();
         onConnected(savedInstanceState);
 
-        startButton = (Button) view.findViewById(R.id.panicButton);
 
-        startButton.setOnClickListener(this);
+        TextView longditudeTV = (TextView) view.findViewById(R.id.latitudeTextView);
+        TextView latitudeTv = (TextView) view.findViewById(R.id.longitudeTextView);
+        latitudeTv.setText(latitudeText);
+        longditudeTV.setText(longitudeText);
 
         Button button = (Button) view.findViewById(R.id.panicButton);
         button.setOnClickListener(new View.OnClickListener() {
@@ -80,53 +86,24 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Goog
 
 
         try {
-
             if (getLocationMode(getContext()) != 3) {
-               /* if (getLastKnownLocation() != null) {
-                    latitudeText = String.valueOf(getLastKnownLocation().getLatitude());
-                    longitudeText = String.valueOf(getLastKnownLocation().getLongitude());
-                }*/
-                //popup();
+                popup();
             }
         } catch (Settings.SettingNotFoundException e) {
-            e.printStackTrace();
-        }
+            e.printStackTrace();        }
 
         //start serive
+        AlarmManager alarmManager = (AlarmManager)getContext().getSystemService(Context.ALARM_SERVICE);
+        Intent alarmIntent = new Intent(getContext(), SafeService.class);
+        PendingIntent pending = PendingIntent.getService(getContext(), 0, alarmIntent, 0);
+        alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime() + 10 * 1000, pending);
 
 
         return view;
     }
 
-    public Location getLastLocation() {
-        return lastLocation;
+    private void getSystemService(String alarmService) {
     }
-
-    private BroadcastReceiver SafetyRating = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            int number = intent.getIntExtra("rating", 0);
-            TextView saferating = (TextView) getView().findViewById(R.id.safetyrating);
-            saferating.setText(" " + number);
-
-            if (number > 80) {
-                saferating.setTextColor(Color.parseColor("green"));
-                pushnot();
-
-            } else if (number > 50) {
-                saferating.setTextColor(Color.parseColor("yellow"));
-
-            } else if (number > 0) {
-                saferating.setTextColor(Color.parseColor("red"));
-
-            }
-
-
-        }
-    };
-
-
-
 
     public int getLocationMode(Context context) throws Settings.SettingNotFoundException {
         return Settings.Secure.getInt(getActivity().getContentResolver(), Settings.Secure.LOCATION_MODE); //// FIXME: 31/10/2015
@@ -157,21 +134,23 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Goog
 
     }
 
+    private Location getLastKnownLocation() {
+        List<String> providers = locationManager.getProviders(true);
+        Location bestLocation = null;
+        for (String provider : providers) {
+            Location l = locationManager.getLastKnownLocation(provider);
 
-    public void pushnot() {
-        PendingIntent pi = PendingIntent.getActivity(getContext(), 0, new Intent(getContext(), HomeFragment.class), 0);
-        Resources r = getResources();
-        Notification notification = new NotificationCompat.Builder(getContext())
-                .setTicker(r.getString(R.string.error))//notification_title
-                .setSmallIcon(android.R.drawable.ic_menu_report_image)
-                .setContentTitle(r.getString(R.string.notification_title))
-                .setContentText(r.getString(R.string.notification_text))
-                .setContentIntent(pi)
-                .setAutoCancel(true)
-                .build();
-
-        NotificationManager notificationManager = (NotificationManager) getContext().getSystemService(Context.NOTIFICATION_SERVICE);
-        notificationManager.notify(0, notification);
+            if (l == null) {
+                continue;
+            }
+            if (bestLocation == null || l.getAccuracy() < bestLocation.getAccuracy()) {
+                bestLocation = l;
+            }
+        }
+        if (bestLocation == null) {
+            return null;
+        }
+        return bestLocation;
     }
 
     @Override
@@ -188,11 +167,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Goog
             latitudeTv.setText(latitudeText);
             longditudeTV.setText(longitudeText);
 
-            SafetyzoneApplication safetyzoneApplication = SafetyzoneApplication.get();
-            safetyzoneApplication.setLastlocation(lastLocation);
-
-            startService();
-
 
         } else {
             latitudeText = "33.8650";
@@ -202,53 +176,71 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Goog
 
         }
 
+        /*
+        TextView longditudeTV = (TextView) view.findViewById(R.id.latitudeTextView);
+        TextView latitudeTv = (TextView) view.findViewById(R.id.longitudeTextView);
+        latitudeTv.setText(latitudeText);
+        longditudeTV.setText(longitudeText); */
     }
 
     @Override
     public void onConnectionSuspended(int i) {
+        Toast.makeText(getContext(), "fail2!", Toast.LENGTH_SHORT).show();
 
-    }
-
-    public void startService() {
-        AlarmManager alarmManager = (AlarmManager) getContext().getSystemService(Context.ALARM_SERVICE);
-        Intent alarmIntent = new Intent(getContext(), SafeService.class);
-        alarmIntent.putExtra("lattext", latitudeText);
-        alarmIntent.putExtra("longtext", longitudeText);
-        PendingIntent pending = PendingIntent.getService(getContext(), 0, alarmIntent, 0);
-        //alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime() + 10 * 1000, pending);
-        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), 1000 * 10 * 2, pending); // Millisec * Second * Minute
-        Log.i("after call", "point reached");
-    }
-
-    @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        // TODO Auto-generated method stub
-        super.onActivityCreated(savedInstanceState);
 
     }
 
     @Override
-    public void onClick(View v) {
-        if (v == startButton) {
-            Log.e("inside method", "fragment load");
-            Fragment fragment2 = new FollowFragment();
-            FragmentManager fm = getFragmentManager();
-            FragmentTransaction transaction = fm.beginTransaction();
-            transaction.replace(R.id.fragment_placeholder, fragment2);
-            transaction.commit();
+    public void onConnectionFailed(ConnectionResult connectionResult) {
+        Toast.makeText(getContext(), "fail!", Toast.LENGTH_LONG).show();
 
-            Log.e("outside method", "fragment loaded...............");
-        }
+    }
+
+    public void popup() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+
+        // Set Alert Dialog Title
+        builder.setTitle("Your location is not enabled");
+
+        // Set an Icon for this Alert Dialog
+        //builder.setIcon(R.drawable.icon1);
+
+        // Set Alert Dialog Message
+        builder.setMessage("Do you want to turn on location services?")
+
+                .setNegativeButton("Yes", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int arg0) {
+
+                        startActivity(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS));
+                    }
+                })
+
+                .setPositiveButton("No", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int arg0) {
+                        Toast.makeText(getContext(), "you are not safe...", Toast.LENGTH_SHORT).show();
+                        dialog.cancel();
+                    }
+                })
+        ;
+
+        // Create the Alert Dialog
+        AlertDialog alertdialog = builder.create();
+
+        // Show Alert Dialog
+        alertdialog.show();
     }
 
     protected void sendSMSMessage() {
         Log.i("Send sms", "it worked");
-        String defaultMessage = "Panic at the disco";
+        defaultMessage = "Hello friend, I am dire need of help - alert Gandalf to send the Eagles! my location is " + latitudeText + " " + longitudeText;
 
         List<ContactData> contactDataList = ContactDatabaseHelper.get(getContext()).getContactDataList(null);
         ArrayList<String> numbers = new ArrayList<>();
         for (ContactData contactData : contactDataList) {
-            numbers.add(contactData.getmNumber());
+            if(contactData.isDesignated() == 0)
+            {
+                numbers.add(contactData.getmNumber());
+            }
         }
 
         try {
@@ -263,26 +255,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Goog
     }
 
 
-    @Override
-    public void onStart() {
-        super.onStart();
-
-        IntentFilter filter = new IntentFilter();
-        filter.addAction("rating");
-        getActivity().registerReceiver(SafetyRating, filter);
-
-    }
-
-    @Override
-    public void onStop() {
-        super.onStart();
-        getActivity().unregisterReceiver(SafetyRating);
-
-    }
 
 
-    @Override
-    public void onConnectionFailed(ConnectionResult connectionResult) {
 
-    }
+
 }

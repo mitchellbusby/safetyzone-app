@@ -17,16 +17,16 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="latitude: "
-        android:id="@+id/latitudeTextView"
+        android:text="longitude: "
+        android:id="@+id/longitudeTextView"
         android:layout_gravity="center_horizontal" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="longitude: "
-        android:id="@+id/longitudeTextView"
+        android:text="latitude: "
+        android:id="@+id/latitudeTextView"
         android:layout_gravity="center_horizontal" />
 
 
@@ -58,7 +58,6 @@
         android:text="ZONE"
         android:id="@+id/bottominfo"
         android:layout_gravity="center_horizontal" />
-
 
 
 

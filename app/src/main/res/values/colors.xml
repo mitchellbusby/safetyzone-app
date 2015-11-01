@@ -4,6 +4,8 @@
     <color name="color_primary_dark">#0097A7</color>
     <color name="color_accent">#18FFFF</color>
     <color name="WHITE">#FFFFFF</color>
+    <color name="BLACK">#000000</color>
+
 
     <color name="RED">#d70101</color>
 

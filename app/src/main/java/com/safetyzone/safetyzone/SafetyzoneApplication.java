@@ -33,7 +33,7 @@ public class SafetyzoneApplication extends Application{
     Location lastlocation;
 
     private ListView mContactListView;
-    public static final int CONTACTLIMIT = 5;
+    public static final int CONTACTLIMIT = 6;
 
     public static boolean isAddnew() {
         return addnew;

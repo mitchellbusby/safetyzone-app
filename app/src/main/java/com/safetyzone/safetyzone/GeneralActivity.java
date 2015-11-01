@@ -22,7 +22,6 @@ public class GeneralActivity extends AppCompatActivity{
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mDrawerToggle;
     private List<String> mDrawerList;
-    private List<Drawable> mIconList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,7 +38,7 @@ public class GeneralActivity extends AppCompatActivity{
         // Sets the toolbar for older APIs that don't support the tool bar such as ICS
         toolbar = (android.support.v7.widget.Toolbar) findViewById(R.id.mainToolbar);
         toolbar.setTitleTextColor(Color.WHITE);
-        
+        toolbar.setLogo(R.drawable.ic_launcher_24dp);
         setSupportActionBar(toolbar);
     }
 
@@ -67,7 +66,6 @@ public class GeneralActivity extends AppCompatActivity{
     }
     public void initialiseNavigationLinks() {
         mDrawerList = new ArrayList<String>();
-        mIconList = new ArrayList<Drawable>();
 
         // This should be dynamically generated somehow or based on something other than code
         mDrawerList.add("Home");
@@ -122,8 +120,27 @@ public class GeneralActivity extends AppCompatActivity{
         if (mDrawerToggle.onOptionsItemSelected(item)) {
             return true;
         }
-        // Handle your other action bar items...
-        return super.onOptionsItemSelected(item);
+
+        switch (item.getItemId()) {
+            case R.id.action_settings:
+                // User chose the "Settings" item, show the app settings UI...
+                return true;
+
+            case R.id.action_favorite:
+                Fragment chosenFragment = new HomeFragment();
+                android.support.v4.app.FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+                ft.replace(R.id.fragment_placeholder, chosenFragment);
+                ft.commit();
+                changeToolbarTitleText("Home");
+                return true;
+
+            default:
+                // If we got here, the user's action was not recognized.
+                // Invoke the superclass to handle it.
+                return super.onOptionsItemSelected(item);
+
+        }
+
     }
 
     private class DrawerItemClickListener implements AdapterView.OnItemClickListener {
@@ -138,5 +155,7 @@ public class GeneralActivity extends AppCompatActivity{
         getMenuInflater().inflate(R.menu.menu, menu);
         return true;
     }
+
+
 
 }
