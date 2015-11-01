@@ -84,7 +84,7 @@ public class AddContactActivity extends ActionBarActivity {
                     }
                 }
                 ContactData contactData = new ContactData(0, name.getText().toString(), number.getText().toString(), dateInMillisecond, checked);
-                sendSMSMessage(contactData, checked);
+                sendSMSMessage(number.getText().toString(), checked);
                 ContactDatabaseHelper.get(this).addContact(contactData);
 
                 finish();
@@ -104,7 +104,7 @@ public class AddContactActivity extends ActionBarActivity {
     }
 
 
-    protected void sendSMSMessage(ContactData contact, int isDesignated) {
+    protected void sendSMSMessage(String number, int isDesignated) {
         Log.i("Send sms", "it worked");
         String messge1 = "You have been choosen as an Designated contact for SAFETYZONE";
         String messge2 = "You have been choosen as an emergency contact for SAFETYZONE";
@@ -112,13 +112,13 @@ public class AddContactActivity extends ActionBarActivity {
         if(isDesignated == 1)
         {
             SmsManager smsManager = SmsManager.getDefault();
-            smsManager.sendTextMessage(contact.getmNumber(), null, messge1, null, null);
+            smsManager.sendTextMessage(number, null, messge1, null, null);
             Toast.makeText(getBaseContext(), "Sms sent!", Toast.LENGTH_LONG).show();
         }
         else
         {
             SmsManager smsManager = SmsManager.getDefault();
-            smsManager.sendTextMessage(contact.getmNumber(), null, messge2, null, null);
+            smsManager.sendTextMessage(number, null, messge2, null, null);
             Toast.makeText(getBaseContext(), "Sms sent!", Toast.LENGTH_LONG).show();
         }
 
