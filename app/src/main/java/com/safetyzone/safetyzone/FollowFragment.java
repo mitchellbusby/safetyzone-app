@@ -232,7 +232,7 @@ public class FollowFragment extends Fragment implements GoogleApiClient.Connecti
 
     protected void sendSMSMessage() {
         Log.i("Send sms", "it worked");
-        defaultMessage = "Hello friend, I am dire need of help - alert Gandalf to send he Eagles! my location is " + latitudeText + " " + longitudeText;
+        defaultMessage = "Hello friend, I am dire need of help - alert Gandalf to send the Eagles! my location is " + latitudeText + " " + longitudeText;
 
         List<ContactData> contactDataList = ContactDatabaseHelper.get(getContext()).getContactDataList(null);
         ArrayList<String> numbers = new ArrayList<>();

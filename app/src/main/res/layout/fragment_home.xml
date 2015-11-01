@@ -13,11 +13,24 @@
 
         <ImageView
             android:layout_width="190dp"
+            android:id="@+id/logo"
             android:layout_height="190dp"
             android:layout_marginTop="58dp"
-            android:src="@mipmap/ic_launcher"
+            android:src="@mipmap/sz"
             android:layout_centerHorizontal="true"
             />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="PANIC"
+            android:textColor="#fcfcfc"
+            android:textSize="25dp"
+            android:id="@+id/panicButton"
+            android:layout_marginTop="250dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_centerHorizontal="true"
+            android:background="@drawable/buttonshape"/>
 
     </RelativeLayout>
 
@@ -31,6 +44,8 @@
         android:textColor="@color/WHITE"
         android:visibility="invisible"
         />
+
+
 
 
     <LinearLayout
@@ -51,6 +66,7 @@
             android:background="#8832c1c4"
             android:textColor="@color/WHITE"
             android:layout_marginRight="1dp"
+
             android:textSize="20dp"
             android:layout_alignParentBottom="true"
             />

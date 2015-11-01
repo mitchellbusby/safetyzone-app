@@ -128,8 +128,27 @@ public class GeneralActivity extends AppCompatActivity{
         if (mDrawerToggle.onOptionsItemSelected(item)) {
             return true;
         }
-        // Handle your other action bar items...
-        return super.onOptionsItemSelected(item);
+
+        switch (item.getItemId()) {
+            case R.id.action_settings:
+                // User chose the "Settings" item, show the app settings UI...
+                return true;
+
+            case R.id.action_favorite:
+                Fragment chosenFragment = new HomeFragment();
+                android.support.v4.app.FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+                ft.replace(R.id.fragment_placeholder, chosenFragment);
+                ft.commit();
+                changeToolbarTitleText("Home");
+                return true;
+
+            default:
+                // If we got here, the user's action was not recognized.
+                // Invoke the superclass to handle it.
+                return super.onOptionsItemSelected(item);
+
+        }
+
     }
 
     private class DrawerItemClickListener implements AdapterView.OnItemClickListener {
@@ -144,5 +163,7 @@ public class GeneralActivity extends AppCompatActivity{
         getMenuInflater().inflate(R.menu.menu, menu);
         return true;
     }
+
+
 
 }

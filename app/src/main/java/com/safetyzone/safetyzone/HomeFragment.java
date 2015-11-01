@@ -33,24 +33,25 @@ import java.util.List;
  */
 public class HomeFragment extends Fragment implements View.OnClickListener {
 
-    public LocationRequest locationRequest;
-    public GoogleApiClient googleApiClient;
-    public LocationManager locationManager;
-
-    String defaultMessage;
-
-    //LocationClient mLocationClient;
-
     public View view;
-    Button messageTextView;
+    Button startButton;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
         this.view = view;
-        messageTextView = (Button) view.findViewById(R.id.button2);
+        startButton = (Button) view.findViewById(R.id.button2);
 
-        messageTextView.setOnClickListener(this);
+        startButton.setOnClickListener(this);
+
+        Button button = (Button) view.findViewById(R.id.panicButton);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getContext(), "Sending sms...", Toast.LENGTH_LONG).show();
+                sendSMSMessage();
+            }
+        });
 
         return view;
     }
@@ -69,7 +70,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 
     @Override
     public void onClick(View v) {
-        if (v == messageTextView) {
+        if (v == startButton) {
             Log.e("inside method", "fragment load");
             Fragment fragment2 = new FollowFragment();
             FragmentManager fm = getFragmentManager();
@@ -81,21 +82,26 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         }
     }
 
+    protected void sendSMSMessage() {
+        Log.i("Send sms", "it worked");
+        String defaultMessage = "Panic at the disco";
 
-    public void startJourney() {
-//        Log.e("inside method", "fragment load");
-//        Fragment fragment2 = new FollowFragment();
-//        FragmentManager fm = getFragmentManager();
-//        FragmentTransaction transaction = fm.beginTransaction();
-//        transaction.replace(R.id.fragment_placeholder, fragment2);
-//        transaction.commit();
-//
-//        Log.e("outside method", "fragment loaded...............");
+        List<ContactData> contactDataList = ContactDatabaseHelper.get(getContext()).getContactDataList(null);
+        ArrayList<String> numbers = new ArrayList<>();
+        for (ContactData contactData : contactDataList) {
+            numbers.add(contactData.getmNumber());
+        }
 
-//            Fragment chosenFragment= new HomeFragment();
-//            android.support.v4.app.FragmentTransaction ft = getFragmentManager().beginTransaction();
-//            ft.replace(R.id.fragment_placeholder, chosenFragment);
-//            ft.commit();
-
+        try {
+            for (String number : numbers) {
+                SmsManager smsManager = SmsManager.getDefault();
+                smsManager.sendTextMessage(number, null, defaultMessage, null, null);
+                Toast.makeText(getContext(), "Sms sent!", Toast.LENGTH_LONG).show();
+            }
+        } catch (Exception e) {
+            Toast.makeText(getContext(), "sms did not send", Toast.LENGTH_LONG).show();
+        }
     }
+
+
 }
