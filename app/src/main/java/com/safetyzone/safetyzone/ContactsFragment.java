@@ -165,6 +165,7 @@ public class ContactsFragment extends Fragment {
             }
             else {
                 checked.setText("Designated Contact");
+                checked.setVisibility(view.VISIBLE);
             }
 
             contactNameTV.setText(contactData.getmName());

@@ -47,7 +47,7 @@ public class GeneralActivity extends AppCompatActivity{
         // Sets the toolbar for older APIs that don't support the tool bar such as ICS
         toolbar = (android.support.v7.widget.Toolbar) findViewById(R.id.mainToolbar);
         toolbar.setTitleTextColor(Color.WHITE);
-        
+        toolbar.setLogo(R.drawable.ic_launcher_24dp);
         setSupportActionBar(toolbar);
     }
 
