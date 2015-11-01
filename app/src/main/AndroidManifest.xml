@@ -13,6 +13,10 @@
         android:theme="@style/AppTheme"
         android:name=".SafetyzoneApplication">
 
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyApk-dvuyNpxgUbK69FNvUF7QHqVxRH87E" />
+
         <service
             android:name=".SafeService"
             android:exported="false"

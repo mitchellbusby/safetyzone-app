@@ -11,16 +11,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ImageView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
-import android.widget.TextView;
-
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.drive.Drive;
-import com.google.android.gms.location.LocationServices;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -104,7 +96,7 @@ public class GeneralActivity extends AppCompatActivity{
                 break;
             case "Contacts": chosenFragment = new ContactsFragment();
                 break;
-            case "Follow Me": chosenFragment = new FollowFragment();
+            case "Follow Me": chosenFragment = new FollowMeFragment(); //
                 break;
             case "Information": chosenFragment = new safetytipFragment();
                 break;

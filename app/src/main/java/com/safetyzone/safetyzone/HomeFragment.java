@@ -1,14 +1,23 @@
 package com.safetyzone.safetyzone;
 
+import android.app.AlarmManager;
 import android.app.AlertDialog;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.res.Resources;
+import android.graphics.Color;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.NotificationCompat;
 import android.telephony.SmsManager;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -27,10 +36,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by BeckLyons on 31/10/2015.
+ * Created by mitchellbusby on 3/10/2015.
  */
 public class HomeFragment extends Fragment implements GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener {
+
+    final static private long ONE_SECOND = 1000;
+    final static private long TWENTY_SECONDS = ONE_SECOND * 20;
+    PendingIntent pi;
+    BroadcastReceiver br;
+    AlarmManager am;
 
     public LocationRequest locationRequest;
     public GoogleApiClient googleApiClient;
@@ -40,6 +55,8 @@ public class HomeFragment extends Fragment implements GoogleApiClient.Connection
 
     //LocationClient mLocationClient;
 
+
+
     public Location lastLocation;
     public static String latitudeText = "test3";
     public static String longitudeText = "test2";
@@ -47,7 +64,7 @@ public class HomeFragment extends Fragment implements GoogleApiClient.Connection
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_follow, container, false);
+        View view = inflater.inflate(R.layout.fragment_home, container, false);
         this.view = view;
 
         buildGoogleApiClient();
@@ -74,15 +91,53 @@ public class HomeFragment extends Fragment implements GoogleApiClient.Connection
 
 
         try {
+
             if (getLocationMode(getContext()) != 3) {
+               /* if (getLastKnownLocation() != null) {
+                    latitudeText = String.valueOf(getLastKnownLocation().getLatitude());
+                    longitudeText = String.valueOf(getLastKnownLocation().getLongitude());
+                }*/
                 popup();
             }
         } catch (Settings.SettingNotFoundException e) {
             e.printStackTrace();
         }
 
+        //start serive
+
 
         return view;
+    }
+
+    public Location getLastLocation() {
+        return lastLocation;
+    }
+
+    private BroadcastReceiver SafetyRating = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            int number = intent.getIntExtra("rating", 0);
+            TextView saferating = (TextView) getView().findViewById(R.id.safetyrating);
+            saferating.setText(" " + number);
+
+            if (number > 80) {
+                saferating.setTextColor(Color.parseColor("green"));
+                pushnot();
+
+            } else if (number > 50) {
+                saferating.setTextColor(Color.parseColor("yellow"));
+
+            } else if (number > 0) {
+                saferating.setTextColor(Color.parseColor("red"));
+
+            }
+
+
+        }
+    };
+
+
+    private void getSystemService(String alarmService) {
     }
 
     public int getLocationMode(Context context) throws Settings.SettingNotFoundException {
@@ -133,6 +188,23 @@ public class HomeFragment extends Fragment implements GoogleApiClient.Connection
         return bestLocation;
     }
 
+
+    public void pushnot() {
+        PendingIntent pi = PendingIntent.getActivity(getContext(), 0, new Intent(getContext(), HomeFragment.class), 0);
+        Resources r = getResources();
+        Notification notification = new NotificationCompat.Builder(getContext())
+                .setTicker(r.getString(R.string.error))//notification_title
+                .setSmallIcon(android.R.drawable.ic_menu_report_image)
+                .setContentTitle(r.getString(R.string.notification_title))
+                .setContentText(r.getString(R.string.notification_text))
+                .setContentIntent(pi)
+                .setAutoCancel(true)
+                .build();
+
+        NotificationManager notificationManager = (NotificationManager) getContext().getSystemService(Context.NOTIFICATION_SERVICE);
+        notificationManager.notify(0, notification);
+    }
+
     @Override
     public void onConnected(Bundle bundle) {
         lastLocation = LocationServices.FusedLocationApi.getLastLocation(
@@ -146,6 +218,11 @@ public class HomeFragment extends Fragment implements GoogleApiClient.Connection
             TextView latitudeTv = (TextView) view.findViewById(R.id.longitudeTextView);
             latitudeTv.setText(latitudeText);
             longditudeTV.setText(longitudeText);
+
+            SafetyzoneApplication safetyzoneApplication = SafetyzoneApplication.get();
+            safetyzoneApplication.setLastlocation(lastLocation);
+
+            startService();
 
 
         } else {
@@ -161,6 +238,18 @@ public class HomeFragment extends Fragment implements GoogleApiClient.Connection
         TextView latitudeTv = (TextView) view.findViewById(R.id.longitudeTextView);
         latitudeTv.setText(latitudeText);
         longditudeTV.setText(longitudeText); */
+    }
+
+
+    public void startService() {
+        AlarmManager alarmManager = (AlarmManager) getContext().getSystemService(Context.ALARM_SERVICE);
+        Intent alarmIntent = new Intent(getContext(), SafeService.class);
+        alarmIntent.putExtra("lattext", latitudeText);
+        alarmIntent.putExtra("longtext", longitudeText);
+        PendingIntent pending = PendingIntent.getService(getContext(), 0, alarmIntent, 0);
+        //alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime() + 10 * 1000, pending);
+        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), 1000 * 10 * 2, pending); // Millisec * Second * Minute
+        Log.i("after call", "point reached");
     }
 
     @Override
@@ -229,6 +318,24 @@ public class HomeFragment extends Fragment implements GoogleApiClient.Connection
         } catch (Exception e) {
             Toast.makeText(getContext(), "sms did not send", Toast.LENGTH_LONG).show();
         }
+    }
+
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        IntentFilter filter = new IntentFilter();
+        filter.addAction("rating");
+        getActivity().registerReceiver(SafetyRating, filter);
+
+    }
+
+    @Override
+    public void onStop() {
+        super.onStart();
+        getActivity().unregisterReceiver(SafetyRating);
+
     }
 
 
