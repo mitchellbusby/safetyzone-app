@@ -47,39 +47,39 @@ public class HomeFragment extends Fragment implements GoogleApiClient.Connection
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_follow, container, false);
+        View view = inflater.inflate(R.layout.fragment_home, container, false);
         this.view = view;
 
-        buildGoogleApiClient();
-        googleApiClient.connect();
-
-        //getLastKnownLocation();
-        locationRequest();
-        onConnected(savedInstanceState);
-
-
-        TextView longditudeTV = (TextView) view.findViewById(R.id.latitudeTextView);
-        TextView latitudeTv = (TextView) view.findViewById(R.id.longitudeTextView);
-        latitudeTv.setText(latitudeText);
-        longditudeTV.setText(longitudeText);
-
-        Button button = (Button) view.findViewById(R.id.panicButton);
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(getContext(), "Sending sms...", Toast.LENGTH_LONG).show();
-                sendSMSMessage();
-            }
-        });
-
-
-        try {
-            if (getLocationMode(getContext()) != 3) {
-                popup();
-            }
-        } catch (Settings.SettingNotFoundException e) {
-            e.printStackTrace();
-        }
+//        buildGoogleApiClient();
+//        googleApiClient.connect();
+//
+//        //getLastKnownLocation();
+//        locationRequest();
+//        onConnected(savedInstanceState);
+//
+//
+//        TextView longditudeTV = (TextView) view.findViewById(R.id.latitudeTextView);
+//        TextView latitudeTv = (TextView) view.findViewById(R.id.longitudeTextView);
+//        latitudeTv.setText(latitudeText);
+//        longditudeTV.setText(longitudeText);
+//
+//        Button button = (Button) view.findViewById(R.id.panicButton);
+//        button.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Toast.makeText(getContext(), "Sending sms...", Toast.LENGTH_LONG).show();
+//                sendSMSMessage();
+//            }
+//        });
+//
+//
+//        try {
+//            if (getLocationMode(getContext()) != 3) {
+//                popup();
+//            }
+//        } catch (Settings.SettingNotFoundException e) {
+//            e.printStackTrace();
+//        }
 
 
         return view;
@@ -229,6 +229,10 @@ public class HomeFragment extends Fragment implements GoogleApiClient.Connection
         } catch (Exception e) {
             Toast.makeText(getContext(), "sms did not send", Toast.LENGTH_LONG).show();
         }
+    }
+
+    public void startJourney() {
+
     }
 
 
