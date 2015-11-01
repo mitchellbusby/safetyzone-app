@@ -78,7 +78,7 @@ public class ContactSingleActivity extends ActionBarActivity {
         if (checked==1) {
             checked = 0;
         } else {
-            checked=1;
+            checked = 1;
         }
     }
 
@@ -87,11 +87,15 @@ public class ContactSingleActivity extends ActionBarActivity {
         /*notify user of making new deso contact*/
         EditText number = (EditText) findViewById(R.id.add_contact_number_edittext);
         EditText name = (EditText) findViewById(R.id.add_contact_name_edittext);
-
+        contactName = name.getText().toString();
+        contactNumber = number.getText().toString();
 
         if (checked==1) {
             popup(name.getText().toString());}
+
         else {
+            ContactData contactData = new ContactData(contactId, contactName, contactNumber, 0, 0);
+            ContactDatabaseHelper.get(getApplicationContext()).updateContact(contactData);
             finish(); }
 
 
@@ -199,6 +203,9 @@ public class ContactSingleActivity extends ActionBarActivity {
                         contactDataList.get(0).setmName(newName);
 //                        ContactData contactData = new ContactData(0, contactName,contactNumber, 2, checked);
 //                        ContactDatabaseHelper.get(getApplicationContext()).addContact(contactData);
+                        contactDesignated = 1;
+                        ContactData contactData = new ContactData(contactId, contactName, contactNumber, 0, contactDesignated);
+                        ContactDatabaseHelper.get(getApplicationContext()).updateContact(contactData);
                         finish();
                     }
                 })

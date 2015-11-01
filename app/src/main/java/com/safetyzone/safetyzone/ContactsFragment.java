@@ -178,7 +178,7 @@ public class ContactsFragment extends Fragment {
                 public void onClick(View v) {
                     Intent singleContact = new Intent(getContext(), ContactSingleActivity.class);
                     singleContact.putExtra("name",contactData.getmName());
-                    singleContact.putExtra("id", 2);
+                    singleContact.putExtra("id", contactData.getmId());
                     singleContact.putExtra("deso", contactData.isDesignated());
                     singleContact.putExtra("number", contactData.getmNumber());
                     startActivity(singleContact);
