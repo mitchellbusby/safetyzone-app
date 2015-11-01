@@ -2,6 +2,7 @@ package com.safetyzone.safetyzone;
 
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.telephony.SmsManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -10,6 +11,7 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
@@ -82,6 +84,7 @@ public class AddContactActivity extends ActionBarActivity {
                     }
                 }
                 ContactData contactData = new ContactData(0, name.getText().toString(), number.getText().toString(), dateInMillisecond, checked);
+                sendSMSMessage(contactData, checked);
                 ContactDatabaseHelper.get(this).addContact(contactData);
 
                 finish();
@@ -99,6 +102,29 @@ public class AddContactActivity extends ActionBarActivity {
 
 
     }
+
+
+    protected void sendSMSMessage(ContactData contact, int isDesignated) {
+        Log.i("Send sms", "it worked");
+        String messge1 = "You have been choosen as an Designated contact for SAFETYZONE";
+        String messge2 = "You have been choosen as an emergency contact for SAFETYZONE";
+
+        if(isDesignated == 1)
+        {
+            SmsManager smsManager = SmsManager.getDefault();
+            smsManager.sendTextMessage(contact.getmNumber(), null, messge1, null, null);
+            Toast.makeText(getBaseContext(), "Sms sent!", Toast.LENGTH_LONG).show();
+        }
+        else
+        {
+            SmsManager smsManager = SmsManager.getDefault();
+            smsManager.sendTextMessage(contact.getmNumber(), null, messge2, null, null);
+            Toast.makeText(getBaseContext(), "Sms sent!", Toast.LENGTH_LONG).show();
+        }
+
+
+    }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

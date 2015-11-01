@@ -240,7 +240,7 @@ public class FollowFragment extends Fragment implements GoogleApiClient.Connecti
         List<ContactData> contactDataList = ContactDatabaseHelper.get(getContext()).getContactDataList(null);
         ArrayList<String> numbers = new ArrayList<>();
         for (ContactData contactData : contactDataList) {
-            if(contactData.isDesignated() == 0)
+            if(contactData.isDesignated() == 1)
             {
                 numbers.add(contactData.getmNumber());
             }

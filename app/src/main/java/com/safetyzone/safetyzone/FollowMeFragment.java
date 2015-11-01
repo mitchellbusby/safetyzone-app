@@ -67,6 +67,9 @@ public class FollowMeFragment extends Fragment implements OnMapReadyCallback {
                 popup();
                 followme = true;
 
+
+
+
                 TextView followstat = (TextView) getView().findViewById(R.id.followstatus);
                 followstat.setText("Follow me is on");
                 followstat.setTextColor(Color.parseColor("green"));
@@ -131,22 +134,20 @@ public class FollowMeFragment extends Fragment implements OnMapReadyCallback {
         // Set Alert Dialog Message
         builder.setMessage("Do you want to alert designated contact?")
 
-                .setNegativeButton("Yes", new DialogInterface.OnClickListener() {
+                .setNegativeButton("No", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int arg0) {
-
-                        SafetyzoneApplication safetyzoneApplication = SafetyzoneApplication.get();
-                        Toast.makeText(getContext(), "Sending sms...", Toast.LENGTH_LONG).show();
-                        String defaultMessage1 = "Dear friend, I am traveling on a dangerous road and would like you to " +
-                                "ensure my safety through following me. If I do not send you a text in the next hour confirming my arrival" +
-                                "at the destination, please know I have reach my wicked end. last known location " + safetyzoneApplication.getLastlocation().getLatitude() + " " + safetyzoneApplication.getLastlocation().getLongitude();
-                        sendSMSMessage(defaultMessage1);
+                        dialog.cancel();
                     }
                 })
 
-                .setPositiveButton("No", new DialogInterface.OnClickListener() {
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int arg0) {
-                        //Toast.makeText(getContext(), "you are not safe...", Toast.LENGTH_SHORT).show();
-                        dialog.cancel();
+                        SafetyzoneApplication safetyzoneApplication = SafetyzoneApplication.get();
+                        Toast.makeText(getContext(), "Sending sms...", Toast.LENGTH_LONG).show();
+                        String defaultMessage1 = "Dear friend, I am traveling on a dangerous road and would like you to " +
+                                "ensure my safety through following me. Last known location " + safetyzoneApplication.getLastlocation().getLatitude() + " " + safetyzoneApplication.getLastlocation().getLongitude();
+                        sendSMSMessage(defaultMessage1);
+
                     }
                 })
         ;

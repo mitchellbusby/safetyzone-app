@@ -11,6 +11,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.v7.app.ActionBarActivity;
+import android.telephony.SmsManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -206,6 +207,11 @@ public class ContactSingleActivity extends ActionBarActivity {
 //                        ContactData contactData = new ContactData(0, contactName,contactNumber, 2, checked);
 //                        ContactDatabaseHelper.get(getApplicationContext()).addContact(contactData);
                         contactDesignated = 1;
+
+
+                        SmsManager smsManager = SmsManager.getDefault();
+                        smsManager.sendTextMessage(contactNumber, null, "You have been choosen as an Designated contact for SAFETYZONE", null, null);
+                        Toast.makeText(getBaseContext(), "Sms sent!", Toast.LENGTH_LONG).show();
                         ContactData contactData = new ContactData(contactId, contactName, contactNumber, 0, contactDesignated);
                         ContactDatabaseHelper.get(getApplicationContext()).updateContact(contactData);
                         finish();
