@@ -1,7 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@drawable/background">
+
+
+    <ImageView
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:src="@mipmap/sz"
+        android:layout_gravity="center"/>
 
 
     <TextView
@@ -10,24 +18,32 @@
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="You are currently located at"
         android:id="@+id/textView"
-        android:layout_gravity="center_horizontal" />
+        android:layout_gravity="center_horizontal"
+        android:textColor="@color/WHITE"
+        android:layout_marginTop="10dp"
+        android:visibility="gone"/>
 
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="longitude: "
+        android:visibility="gone"
         android:id="@+id/longitudeTextView"
-        android:layout_gravity="center_horizontal" />
+        android:layout_gravity="center_horizontal"
+        android:textColor="@color/WHITE"/>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="latitude: "
+        android:visibility="gone"
         android:id="@+id/latitudeTextView"
-        android:layout_gravity="center_horizontal" />
+        android:layout_gravity="center_horizontal"
+        android:textColor="@color/WHITE"/>
+
+        <!--android:text="latitude: "-->
+    <!--android:text="longitude: "-->
 
 
 
@@ -39,7 +55,8 @@
         android:text="YOU ARE IN A LEVEL"
         android:id="@+id/topinfo"
         android:layout_gravity="center_horizontal"
-        android:paddingTop="30dp"/>
+        android:paddingTop="30dp"
+        android:textColor="@color/WHITE"/>
 
     <TextView
         android:layout_width="wrap_content"
@@ -49,7 +66,8 @@
         android:textSize="40pt"
         android:textColor="@color/RED"
         android:id="@+id/safetyrating"
-        android:layout_gravity="center_horizontal" />
+        android:layout_gravity="center_horizontal"
+        />
 
     <TextView
         android:layout_width="wrap_content"
@@ -57,7 +75,8 @@
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="ZONE"
         android:id="@+id/bottominfo"
-        android:layout_gravity="center_horizontal" />
+        android:layout_gravity="center_horizontal"
+        android:textColor="@color/WHITE"/>
 
 
 
