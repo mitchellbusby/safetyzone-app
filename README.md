@@ -19,4 +19,8 @@ The app also has a bunch of safety tips, and allows the user to set a designated
 We initially planned to use more specific and granular statistics, but BOCSAR denied our requests for more in depth datasets than at the LGA level. :(
 
 
+#Screenshots
+
+https://drive.google.com/folderview?id=0BxWyFRHYW7uKc1o3dWpvZlpSZzg&usp=sharing
+
 
