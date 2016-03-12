@@ -22,5 +22,3 @@ We initially planned to use more specific and granular statistics, but BOCSAR de
 #Screenshots
 
 https://drive.google.com/folderview?id=0BxWyFRHYW7uKc1o3dWpvZlpSZzg&usp=sharing
-
-
